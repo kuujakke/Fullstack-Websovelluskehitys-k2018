@@ -1,0 +1,19 @@
+Käyttäjä->Selain:
+
+note right of Käyttäjä
+Käyttäjä täyttää lomakkeen ja painaa tallenna nappia.
+end note
+
+note right of Selain
+Selain lähettää lomakkeen.
+end note
+
+Selain->Palvelin: POST fullstack-exampleapp.herokuapp.com/new_note_spa
+
+Palvelin->Selain: status 201, Created
+
+note left of Selain
+  Selain piirtää sivun uudelleen lisäten sivulle käyttäjän syöttämän datan.
+end note
+
+Selain -> Käyttäjä:
