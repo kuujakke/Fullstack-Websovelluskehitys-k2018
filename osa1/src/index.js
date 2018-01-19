@@ -2,33 +2,35 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 const App = () => {
-    const kurssi = 'Half Stack -sovelluskehitys'
-    const osat = [
-        {
-            nimi: 'Reactin perusteet',
-            tehtavia: 10
-        },
-        {
-            nimi: 'Tiedonvälitys propseilla',
-            tehtavia: 7
-        },
-        {
-            nimi: 'Komponenttien tila',
-            tehtavia: 14
-        }
-    ]
+    const kurssi = {
+        nimi: 'Half Stack -sovelluskehitys',
+        osat: [
+            {
+                nimi: 'Reactin perusteet',
+                tehtavia: 10
+            },
+            {
+                nimi: 'Tiedonvälitys propseilla',
+                tehtavia: 7
+            },
+            {
+                nimi: 'Komponenttien tila',
+                tehtavia: 14
+            }
+        ]
+    }
     return (
         [
-            <Otsikko kurssi={kurssi}/>,
-            <Sisalto osat={osat}/>,
-            <Yhteensa osat={osat}/>
+            <Otsikko nimi={kurssi.nimi}/>,
+            <Sisalto osat={kurssi.osat}/>,
+            <Yhteensa osat={kurssi.osat}/>
         ]
     )
 }
 
 const Otsikko = (props) => {
     return (
-        <h1>{props.kurssi}</h1>
+        <h1>{props.nimi}</h1>
     )
 }
 
