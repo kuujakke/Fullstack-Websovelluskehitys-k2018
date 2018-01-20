@@ -3,16 +3,18 @@ import React from 'react';
 class App extends React.Component {
     constructor(props) {
         super(props)
+        let persons = [
+            { id: 0, name: 'Arto Hellas', number: '0700-123123' },
+            { id: 1, name: 'Martti Tienari', number: '040-123456' },
+            { id: 2, name: 'Arto Järvinen', number: '040-123456' },
+            { id: 3, name: 'Lea Kutvonen', number: '040-123456' }
+        ]
         this.state = {
-            persons: [
-                {
-                    id: 0,
-                    name: 'Arto Hellas',
-                    number: '0700-123123'
-                }
-            ],
+            persons: persons,
             newName: '',
-            newNumber: ''
+            newNumber: '',
+            search: '',
+            searchResults: persons
         }
     }
 
@@ -39,26 +41,51 @@ class App extends React.Component {
 
     handleChange = (event) => {
         event.preventDefault()
+        event.stopPropagation()
         this.setState({ [event.target.title]: event.target.value })
+    }
+
+    handleSearch = (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        let value = event.target.value
+        const searchResults =
+            this.state.persons.find(p => p.name.toLowerCase().includes(value)) | value !== '' ?
+            this.state.persons.filter(p => p.name.toLowerCase().includes(value)) :
+            this.state.persons
+        this.setState({
+            searchResults,
+            [event.target.title]: event.target.value
+        })
     }
 
     render() {
         return (
             <div>
                 <h2>Puhelinluettelo</h2>
+                <form>
+                    Rajaa näytettäviä:
+                    <input
+                        value={this.state.search}
+                        title={"search"}
+                        onChange={this.handleSearch}
+                    />
+                </form>
                 <form onSubmit={this.addNumber}>
-                    <div>nimi:
+                    <div>
+                        <h2>Lisää uusi</h2>
+                        nimi:
                         <input
-                        value={this.state.newName}
-                        title={"newName"}
-                        onChange={this.handleChange}
+                            value={this.state.newName}
+                            title={"newName"}
+                            onChange={this.handleChange}
                         />
                     </div>
                     <div>numero:
                         <input
-                        value={this.state.newNumber}
-                        title={"newNumber"}
-                        onChange={this.handleChange}
+                            value={this.state.newNumber}
+                            title={"newNumber"}
+                            onChange={this.handleChange}
                         />
                     </div>
                     <div>
@@ -67,7 +94,7 @@ class App extends React.Component {
                 </form>
                 <h2>Numerot</h2>
                 <table>
-                    <tbody><Persons persons={this.state.persons} /></tbody>
+                    <tbody><Persons persons={this.state.searchResults} /></tbody>
                 </table>
             </div>
         )
@@ -77,7 +104,7 @@ class App extends React.Component {
 const Persons = ({persons}) => {
     return  persons.length > 0 ?
             persons.map(p => <Person key={p.id} name={p.name} number={p.number} />) :
-            <tr><td>Ei vielä numeroita</td></tr>
+            <tr><td>Ei numeroita</td></tr>
 }
 
 const Person = ({name, number}) => {
