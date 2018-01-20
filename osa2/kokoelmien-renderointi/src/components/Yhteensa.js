@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Yhteensa = ({osat}) => {
-    let yhteensa = osat.map(
+    const yhteensa = osat.map(
         (osa) => osa.tehtavia
     ).reduce(
         (yht, tehtavia) => yht + tehtavia
