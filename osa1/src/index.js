@@ -10,7 +10,8 @@ class App extends React.Component {
             huono: 0,
             pisteet: 0,
             arvostelut: 0,
-            anecdote: props.anecdotes[0]
+            selected: 0,
+            anecdotes: props.anecdotes
         }
     }
 
@@ -22,20 +23,28 @@ class App extends React.Component {
         }
     }
 
-    randomSelect = props => {
-        return (
-            props[Math.floor(Math.random() * props.length)]
-        )
+    randomSelect = (props) => {
+        return (Math.floor(Math.random() * props))
     }
 
     klikNext = (props) => {
-        let anecdote = this.randomSelect(props)
-        while (anecdote === this.state.anecdote) {
-            anecdote = this.randomSelect(props)
+        let selected = this.randomSelect(props)
+        while (selected === this.state.selected) {
+            selected = this.randomSelect(props)
         }
         return () => {
             this.setState({
-                anecdote: anecdote
+                selected: selected
+            })
+        }
+    }
+
+    voteAnecdote = (props) => {
+        return () => {
+            let anecdotes = this.state.anecdotes
+            anecdotes[props].votes++
+            this.setState({
+                anecdotes: anecdotes
             })
         }
     }
@@ -67,6 +76,7 @@ class App extends React.Component {
     }
 
     render() {
+        let anecdote = this.state.anecdotes[this.state.selected]
         return (
             <div>
                 <h1>Anna palautetta</h1>
@@ -76,8 +86,11 @@ class App extends React.Component {
                 <h1>Statistiikka</h1>
                 <Statistics arvostelut={this.arvostelut()}
                             keskiarvo={this.keskiarvo()}
-                            positiivisia={this.positiivisia()}/>
-                <Anecdote anecdotes={this.props.anecdotes} klikNext={this.klikNext} anecdote={this.state.anecdote}/>
+                            positiivisia={this.positiivisia()} />
+                <Anecdote text={anecdote.text}
+                          votes={anecdote.votes} />
+                <Button klikHandler={this.voteAnecdote} text={"Vote"} kentta={this.state.selected} />
+                <Button klikHandler={this.klikNext} text={"Next anecdote"} kentta={this.state.anecdotes.length} />
             </div>
         )
     }
@@ -120,19 +133,20 @@ const Statistic = (props) => {
 }
 
 const anecdotes = [
-    'If it hurts, do it more often',
-    'Adding manpower to a late software project makes it later!',
-    'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-    'Premature optimization is the root of all evil.',
-    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
+    { text: 'If it hurts, do it more often', votes: 0 },
+    { text: 'Adding manpower to a late software project makes it later!', votes: 0 },
+    { text: 'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.', votes: 0 },
+    { text: 'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.', votes: 0 },
+    { text: 'Premature optimization is the root of all evil.', votes: 0 },
+    { text: 'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.', votes: 0 }
 ]
 
 const Anecdote = (props) => {
     return (
         <div>
-            <h2>{props.anecdote}</h2>
-            <button onClick={props.klikNext(props.anecdotes)}>Next anecdote</button>
+            <h1>Anekdootit</h1>
+            <blockquote>- {props.text}</blockquote>
+            <div>Has {props.votes} votes.</div>
         </div>
     )
 }
