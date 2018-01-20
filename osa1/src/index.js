@@ -55,9 +55,9 @@ class App extends React.Component {
                 <Button klikHandler={this.klikNappi} text={"Neutraali"} kentta={"neutraali"} />
                 <Button klikHandler={this.klikNappi} text={"Huono"} kentta={"huono"} />
                 <h1>Statistiikka</h1>
-                <div>
-                    <Statistics arvostelut={this.arvostelut()} keskiarvo={this.keskiarvo()} positiivisia={this.positiivisia()}/>
-                </div>
+                <Statistics arvostelut={this.arvostelut()}
+                            keskiarvo={this.keskiarvo()}
+                            positiivisia={this.positiivisia()}/>
             </div>
         )
     }
@@ -74,13 +74,15 @@ const Button = (props) => {
 const Statistics = (props) => {
     if (props.arvostelut.hyva > 0 || props.arvostelut.neutraali > 0 || props.arvostelut.huono > 0) {
         return (
-            <div>
-                <Statistic text={"Hyvä"} val={props.arvostelut.hyva} />
-                <Statistic text={"Neutraali"} val={props.arvostelut.neutraali} />
-                <Statistic text={"Huono"} val={props.arvostelut.huono} />
-                <Statistic text={"Keskiarvo"} val={props.keskiarvo} />
-                <Statistic text={"Positiivisia"} val={props.positiivisia} sign={"%"}/>
-            </div>
+            <table>
+                <tbody>
+                    <Statistic text={"Hyvä"} val={props.arvostelut.hyva} />
+                    <Statistic text={"Neutraali"} val={props.arvostelut.neutraali} />
+                    <Statistic text={"Huono"} val={props.arvostelut.huono} />
+                    <Statistic text={"Keskiarvo"} val={props.keskiarvo} />
+                    <Statistic text={"Positiivisia"} val={props.positiivisia} sign={"%"}/>
+                </tbody>
+            </table>
         )
     }
     return (
@@ -90,7 +92,10 @@ const Statistics = (props) => {
 
 const Statistic = (props) => {
     return (
-        <p>{props.text} {props.val} {props.sign}</p>
+        <tr>
+            <td>{props.text}</td>
+            <td>{props.val} {props.sign}</td>
+        </tr>
     )
 }
 
