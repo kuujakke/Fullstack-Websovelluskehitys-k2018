@@ -6,7 +6,7 @@ import Yhteensa from '../components/Yhteensa'
 const Kurssi = ({ kurssi }) => {
     return (
       [
-          <Otsikko key={"otsikko"} text={kurssi.otsikko.text}/>,
+          <Otsikko key={"otsikko"} text={kurssi.nimi}/>,
           <Sisalto key={"sisalto"} osat={kurssi.osat}/>,
           <Yhteensa key={"yhteensa"} osat={kurssi.osat}/>
       ]
