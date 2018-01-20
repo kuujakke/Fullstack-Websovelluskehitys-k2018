@@ -1,8 +1,11 @@
 import React from 'react'
 
 const Yhteensa = ({osat}) => {
-    let yhteensa = 0
-    osat.map(osa => yhteensa += osa.tehtavia)
+    let yhteensa = osat.map(
+        (osa) => osa.tehtavia
+    ).reduce(
+        (yht, tehtavia) => yht + tehtavia
+    )
     return (
         <p key={yhteensa.toString()}>Yhteensä {yhteensa} tehtävää</p>
     )
