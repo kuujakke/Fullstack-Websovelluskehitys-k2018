@@ -49,26 +49,55 @@ class App extends React.Component {
         return positiivisia.toFixed(1)
     }
 
+    arvostelut = () => {
+        return ({
+            hyva: this.state.hyva,
+            neutraali: this.state.neutraali,
+            huono: this.state.huono
+        })
+    }
+
     render() {
         return (
             <div>
+                <h1>Anna palautetta</h1>
+                <Button klikHandler={this.klikHyva} text={"Hyvä"} />
+                <Button klikHandler={this.klikNeutraali} text={"Neutraali"} />
+                <Button klikHandler={this.klikHuono} text={"Huono"} />
+                <h1>Statistiikka</h1>
                 <div>
-                    <h1>Anna palautetta</h1>
-                    <button onClick={this.klikHyva}>Hyvä</button>
-                    <button onClick={this.klikNeutraali}>Neutraali</button>
-                    <button onClick={this.klikHuono}>Huono</button>
-                </div>
-                <div>
-                    <h1>Statistiikka</h1>
-                    <p>Hyvä {this.state.hyva}</p>
-                    <p>Neutraali {this.state.neutraali}</p>
-                    <p>Huono {this.state.huono}</p>
-                    <p>Keskiarvo {this.keskiarvo()}</p>
-                    <p>Positiivisia {this.positiivisia()} %</p>
+                    <Statistics arvostelut={this.arvostelut()} keskiarvo={this.keskiarvo()} positiivisia={this.positiivisia()}/>
                 </div>
             </div>
         )
     }
+}
+
+const Button = (props) => {
+    return (
+        <button onClick={props.klikHandler}>
+            {props.text}
+        </button>
+    )
+}
+
+const Statistics = (props) => {
+    console.log(props)
+    return (
+        <div>
+            <Statistic text={"Hyvä"} val={props.arvostelut.hyva} />
+            <Statistic text={"Neutraali"} val={props.arvostelut.neutraali} />
+            <Statistic text={"Huono"} val={props.arvostelut.huono} />
+            <Statistic text={"Keskiarvo"} val={props.keskiarvo} />
+            <Statistic text={"Positiivisia"} val={props.positiivisia} sign={"%"}/>
+        </div>
+    )
+}
+
+const Statistic = (props) => {
+    return (
+        <p>{props.text} {props.val} {props.sign}</p>
+    )
 }
 
 ReactDOM.render(
