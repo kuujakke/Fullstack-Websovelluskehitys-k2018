@@ -75,8 +75,19 @@ class App extends React.Component {
         })
     }
 
+    mostPopular = () => {
+        let mostPopular = this.state.anecdotes[0]
+        for (let i = 1; i < this.state.anecdotes.length; i++) {
+            if (this.state.anecdotes[i].votes > mostPopular.votes) {
+                mostPopular = this.state.anecdotes[i]
+            }
+        }
+        return (mostPopular)
+    }
+
     render() {
         let anecdote = this.state.anecdotes[this.state.selected]
+        let mostVoted = this.mostPopular()
         return (
             <div>
                 <h1>Anna palautetta</h1>
@@ -87,10 +98,11 @@ class App extends React.Component {
                 <Statistics arvostelut={this.arvostelut()}
                             keskiarvo={this.keskiarvo()}
                             positiivisia={this.positiivisia()} />
-                <Anecdote text={anecdote.text}
-                          votes={anecdote.votes} />
+                <Anecdote text={anecdote.text} votes={anecdote.votes} />
                 <Button klikHandler={this.voteAnecdote} text={"Vote"} kentta={this.state.selected} />
                 <Button klikHandler={this.klikNext} text={"Next anecdote"} kentta={this.state.anecdotes.length} />
+                <h2>Most voted anecdote:</h2>
+                <Anecdote text={mostVoted.text} votes={mostVoted.votes}/>
             </div>
         )
     }
@@ -144,7 +156,6 @@ const anecdotes = [
 const Anecdote = (props) => {
     return (
         <div>
-            <h1>Anekdootit</h1>
             <blockquote>- {props.text}</blockquote>
             <div>Has {props.votes} votes.</div>
         </div>
