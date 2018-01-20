@@ -13,22 +13,12 @@ class App extends React.Component {
         }
     }
 
-    klikHyva = () => {
-        this.setState({
-            hyva: this.state.hyva + 1,
-        })
-    }
-
-    klikNeutraali = () => {
-        this.setState({
-            neutraali: this.state.neutraali + 1,
-        })
-    }
-
-    klikHuono = () => {
-        this.setState({
-            huono: this.state.huono + 1,
-        })
+    klikNappi = (props) => {
+        return () => {
+            this.setState({
+                [props]: this.state[props] + 1
+            })
+        }
     }
 
     keskiarvo = () => {
@@ -61,9 +51,9 @@ class App extends React.Component {
         return (
             <div>
                 <h1>Anna palautetta</h1>
-                <Button klikHandler={this.klikHyva} text={"Hyvä"} />
-                <Button klikHandler={this.klikNeutraali} text={"Neutraali"} />
-                <Button klikHandler={this.klikHuono} text={"Huono"} />
+                <Button klikHandler={this.klikNappi} text={"Hyvä"} kentta={"hyva"}/>
+                <Button klikHandler={this.klikNappi} text={"Neutraali"} kentta={"neutraali"} />
+                <Button klikHandler={this.klikNappi} text={"Huono"} kentta={"huono"} />
                 <h1>Statistiikka</h1>
                 <div>
                     <Statistics arvostelut={this.arvostelut()} keskiarvo={this.keskiarvo()} positiivisia={this.positiivisia()}/>
@@ -75,7 +65,7 @@ class App extends React.Component {
 
 const Button = (props) => {
     return (
-        <button onClick={props.klikHandler}>
+        <button onClick={props.klikHandler(props.kentta)}>
             {props.text}
         </button>
     )
