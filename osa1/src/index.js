@@ -82,15 +82,19 @@ const Button = (props) => {
 }
 
 const Statistics = (props) => {
-    console.log(props)
+    if (props.arvostelut.hyva > 0 || props.arvostelut.neutraali > 0 || props.arvostelut.huono > 0) {
+        return (
+            <div>
+                <Statistic text={"Hyvä"} val={props.arvostelut.hyva} />
+                <Statistic text={"Neutraali"} val={props.arvostelut.neutraali} />
+                <Statistic text={"Huono"} val={props.arvostelut.huono} />
+                <Statistic text={"Keskiarvo"} val={props.keskiarvo} />
+                <Statistic text={"Positiivisia"} val={props.positiivisia} sign={"%"}/>
+            </div>
+        )
+    }
     return (
-        <div>
-            <Statistic text={"Hyvä"} val={props.arvostelut.hyva} />
-            <Statistic text={"Neutraali"} val={props.arvostelut.neutraali} />
-            <Statistic text={"Huono"} val={props.arvostelut.huono} />
-            <Statistic text={"Keskiarvo"} val={props.keskiarvo} />
-            <Statistic text={"Positiivisia"} val={props.positiivisia} sign={"%"}/>
-        </div>
+        <p>Ei yhtään palautetta annettu.</p>
     )
 }
 
