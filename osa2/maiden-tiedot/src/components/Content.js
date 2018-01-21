@@ -1,13 +1,12 @@
 import React from 'react'
 
-const Content = ({results}) => {
+const Content = ({results, handler}) => {
     return results.length === 1 ?
         <ShowCountry country={results[0]} /> :
-        <ListCountries countries={results} />
+        <ListCountries countries={results} handler={handler} />
 }
 
 const ShowCountry = ({country}) => {
-    console.log(country)
     return (
         <div>
             <h1>{country.name}</h1>
@@ -28,12 +27,12 @@ const ShowCountry = ({country}) => {
     )
 }
 
-const ListCountries = ({countries}) => {
+const ListCountries = ({countries, handler}) => {
     return (
         <div>
             <ul>
                 {countries.length <= 10 ?
-                    countries.map(c => <ListItem id={c.id} content={c.name}/>) :
+                    countries.map(c => <ListItem key={c.alpha3Code} content={c.name} handler={handler} />) :
                     <li>Too many results.</li>
                 }
             </ul>
@@ -41,8 +40,8 @@ const ListCountries = ({countries}) => {
     )
 }
 
-const ListItem = ({id, content}) => {
-    return <li key={id}>{content}</li>
+const ListItem = ({content, handler}) => {
+    return <li onClick={handler}>{content}</li>
 }
 
 export default Content
