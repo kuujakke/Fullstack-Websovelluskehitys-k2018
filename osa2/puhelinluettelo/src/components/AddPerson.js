@@ -1,21 +1,21 @@
 import React from 'react'
 
-const AddNumber = ({addHandler, changeHandler, newName, newNumber}) => {
+const AddPerson = ({addHandler, changeHandler, newPerson}) => {
     return (
         <form onSubmit={addHandler}>
             <div>
                 <h2>Lisää uusi</h2>
                 nimi:
                 <input
-                    value={newName}
-                    title={"newName"}
+                    value={newPerson.name}
+                    title={"name"}
                     onChange={changeHandler}
                 />
             </div>
             <div>numero:
                 <input
-                    value={newNumber}
-                    title={"newNumber"}
+                    value={newPerson.number}
+                    title={"number"}
                     onChange={changeHandler}
                 />
             </div>
@@ -26,4 +26,4 @@ const AddNumber = ({addHandler, changeHandler, newName, newNumber}) => {
     )
 }
 
-export default AddNumber
+export default AddPerson

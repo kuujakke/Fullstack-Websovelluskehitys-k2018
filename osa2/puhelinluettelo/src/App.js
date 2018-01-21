@@ -1,7 +1,7 @@
 import React from 'react';
-import axios from 'axios';
+import personService from './services/persons';
 import Content from "./components/Content";
-import AddNumber from "./components/AddNumber";
+import AddPerson from "./components/AddPerson";
 import Search from "./components/Search";
 
 class App extends React.Component {
@@ -9,66 +9,67 @@ class App extends React.Component {
         super(props)
         this.state = {
             persons: [],
-            newName: '',
-            newNumber: '',
+            newPerson: {
+                name: '',
+                number: ''
+            },
             search: '',
             searchResults: []
         }
     }
 
-    addNumber = (event) => {
-        event.preventDefault()
-        event.stopPropagation()
-        const person = {
+    newPerson = (event) => {
+        const newPerson = {
             id: this.state.persons.length + 1,
-            name: this.state.newName,
-            number: this.state.newNumber
+            ...this.state.newPerson
         }
 
-        const persons =
-            this.state.persons.find(p => p.name === this.state.newName | this.state.newName === '') ?
-                this.state.persons :
-                this.state.persons.concat(person)
-
-        this.setState({
-            persons,
-            newName: '',
-            newNumber: '',
-            search: '',
-            searchResults: persons
-        })
+        personService
+            .create(newPerson)
+            .then(newPerson => {
+                this.setState({
+                    persons: this.state.persons.concat(newPerson),
+                    newPerson: {
+                        name: '',
+                        number: ''
+                    },
+                    search: '',
+                    searchResults: this.state.persons.concat(newPerson)
+                })
+            })
     }
 
     handleChange = (event) => {
         event.preventDefault()
         event.stopPropagation()
-        this.setState({ [event.target.title]: event.target.value })
+        let newPerson = this.state.newPerson
+        newPerson[event.target.title] = event.target.value
+        this.setState(newPerson)
     }
 
     handleSearch = (event) => {
         event.preventDefault()
         event.stopPropagation()
-        let searchResults = this.searchResults(event.target.value)
+        let search = event.target.value
+        let searchResults = search.length > 0 ?
+            this.searchPerson(search) :
+            this.state.persons
         this.setState({
             searchResults,
-            [event.target.title]: event.target.value
+            search: event.target.value
         })
     }
 
-    searchResults = (props) => {
-        let persons = this.state.persons
-        return persons.find(p => p.name.toLowerCase().includes(props)) | props !== '' ?
-            persons.filter(p => p.name.toLowerCase().includes(props)) :
-            persons
+    searchPerson = (search) => {
+        return this.state.persons.filter(person => person.name.toLowerCase().includes(search.toLowerCase()))
     }
 
     componentWillMount() {
-        axios
-            .get('http://localhost:3001/persons')
-            .then(response => {
+        personService
+            .getAll()
+            .then(persons => {
                 this.setState({
-                    persons: response.data,
-                    searchResults: response.data.filter(p => p.name.toLowerCase().includes(this.state.search))
+                    persons: persons
                 })
             })
     }
@@ -82,11 +83,10 @@ class App extends React.Component {
                     handler={this.handleSearch}
                 />
                 <h2>Lisää uusi</h2>
-                <AddNumber
-                    addHandler={this.addNumber}
+                <AddPerson
+                    addHandler={this.newPerson}
                     changeHandler={this.handleChange}
-                    newName={this.state.newName}
-                    newNumber={this.state.newNumber}
+                    newPerson={this.state.newPerson}
                 />
                 <h2>Numerot</h2>
                 <Content persons={this.state.searchResults}/>

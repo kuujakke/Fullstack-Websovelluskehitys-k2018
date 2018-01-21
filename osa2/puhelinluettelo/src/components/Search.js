@@ -6,7 +6,6 @@ const Search = ({search, handler}) => {
             Rajaa näytettäviä:
             <input
                 value={search}
-                title={"search"}
                 onChange={handler}
             />
         </form>
