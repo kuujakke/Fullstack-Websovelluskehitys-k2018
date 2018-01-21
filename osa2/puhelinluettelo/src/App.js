@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import Content from "./components/Content";
 import AddNumber from "./components/AddNumber";
 import Search from "./components/Search";
@@ -6,18 +7,12 @@ import Search from "./components/Search";
 class App extends React.Component {
     constructor(props) {
         super(props)
-        let persons = [
-            { id: 0, name: 'Arto Hellas', number: '0700-123123' },
-            { id: 1, name: 'Martti Tienari', number: '040-123456' },
-            { id: 2, name: 'Arto Järvinen', number: '040-123456' },
-            { id: 3, name: 'Lea Kutvonen', number: '040-123456' }
-        ]
         this.state = {
-            persons: persons,
+            persons: [],
             newName: '',
             newNumber: '',
             search: '',
-            searchResults: persons
+            searchResults: []
         }
     }
 
@@ -25,7 +20,7 @@ class App extends React.Component {
         event.preventDefault()
         event.stopPropagation()
         const person = {
-            id: this.state.persons.length,
+            id: this.state.persons.length + 1,
             name: this.state.newName,
             number: this.state.newNumber
         }
@@ -65,6 +60,17 @@ class App extends React.Component {
         return persons.find(p => p.name.toLowerCase().includes(props)) | props !== '' ?
             persons.filter(p => p.name.toLowerCase().includes(props)) :
             persons
+    }
+
+    componentWillMount() {
+        axios
+            .get('http://localhost:3001/persons')
+            .then(response => {
+                this.setState({
+                    persons: response.data,
+                    searchResults: response.data.filter(p => p.name.toLowerCase().includes(this.state.search))
+                })
+            })
     }
 
     render() {
