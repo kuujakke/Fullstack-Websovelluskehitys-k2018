@@ -18,12 +18,11 @@ class App extends React.Component {
         }
     }
 
-    newPerson = (event) => {
+    newPerson = () => {
         const newPerson = {
             id: this.state.persons.length + 1,
             ...this.state.newPerson
         }
-
         personService
             .create(newPerson)
             .then(newPerson => {
