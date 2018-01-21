@@ -1,4 +1,7 @@
 import React from 'react';
+import Content from "./components/Content";
+import AddNumber from "./components/AddNumber";
+import Search from "./components/Search";
 
 class App extends React.Component {
     constructor(props) {
@@ -29,13 +32,15 @@ class App extends React.Component {
 
         const persons =
             this.state.persons.find(p => p.name === this.state.newName | this.state.newName === '') ?
-            this.state.persons :
-            this.state.persons.concat(person)
+                this.state.persons :
+                this.state.persons.concat(person)
 
         this.setState({
             persons,
             newName: '',
-            newNumber: ''
+            newNumber: '',
+            search: '',
+            searchResults: persons
         })
     }
 
@@ -48,72 +53,40 @@ class App extends React.Component {
     handleSearch = (event) => {
         event.preventDefault()
         event.stopPropagation()
-        let value = event.target.value
-        const searchResults =
-            this.state.persons.find(p => p.name.toLowerCase().includes(value)) | value !== '' ?
-            this.state.persons.filter(p => p.name.toLowerCase().includes(value)) :
-            this.state.persons
+        let searchResults = this.searchResults(event.target.value)
         this.setState({
             searchResults,
             [event.target.title]: event.target.value
         })
     }
 
+    searchResults = (props) => {
+        let persons = this.state.persons
+        return persons.find(p => p.name.toLowerCase().includes(props)) | props !== '' ?
+            persons.filter(p => p.name.toLowerCase().includes(props)) :
+            persons
+    }
+
     render() {
         return (
             <div>
                 <h2>Puhelinluettelo</h2>
-                <form>
-                    Rajaa näytettäviä:
-                    <input
-                        value={this.state.search}
-                        title={"search"}
-                        onChange={this.handleSearch}
-                    />
-                </form>
-                <form onSubmit={this.addNumber}>
-                    <div>
-                        <h2>Lisää uusi</h2>
-                        nimi:
-                        <input
-                            value={this.state.newName}
-                            title={"newName"}
-                            onChange={this.handleChange}
-                        />
-                    </div>
-                    <div>numero:
-                        <input
-                            value={this.state.newNumber}
-                            title={"newNumber"}
-                            onChange={this.handleChange}
-                        />
-                    </div>
-                    <div>
-                        <button type="submit">lisää</button>
-                    </div>
-                </form>
+                <Search
+                    search={this.state.search}
+                    handler={this.handleSearch}
+                />
+                <h2>Lisää uusi</h2>
+                <AddNumber
+                    addHandler={this.addNumber}
+                    changeHandler={this.handleChange}
+                    newName={this.state.newName}
+                    newNumber={this.state.newNumber}
+                />
                 <h2>Numerot</h2>
-                <table>
-                    <tbody><Persons persons={this.state.searchResults} /></tbody>
-                </table>
+                <Content persons={this.state.searchResults}/>
             </div>
         )
     }
-}
-
-const Persons = ({persons}) => {
-    return  persons.length > 0 ?
-            persons.map(p => <Person key={p.id} name={p.name} number={p.number} />) :
-            <tr><td>Ei numeroita</td></tr>
-}
-
-const Person = ({name, number}) => {
-    return (
-        <tr>
-            <td>{name}</td>
-            <td>{number}</td>
-        </tr>
-    )
 }
 
 export default App
