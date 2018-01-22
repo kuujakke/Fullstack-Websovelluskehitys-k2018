@@ -1,24 +1,25 @@
 import React from 'react'
 
-const Content = ({persons}) => {
+const Content = ({persons, deleteHandler}) => {
     return (
         <table>
-            <tbody><Persons persons={persons} /></tbody>
+            <tbody><Persons persons={persons} deleteHandler={deleteHandler} /></tbody>
         </table>
     )
 }
 
-const Persons = ({persons}) => {
+const Persons = ({persons, deleteHandler}) => {
     return  persons.length > 0 ?
-        persons.map(p => <Person key={p.id} name={p.name} number={p.number} />) :
+        persons.map(p => <Person key={p.id} id={p.id} name={p.name} number={p.number} deleteHandler={deleteHandler} />) :
         <tr><td>Ei numeroita</td></tr>
 }
 
-const Person = ({name, number}) => {
+const Person = ({id, name, number, deleteHandler}) => {
     return (
         <tr>
             <td>{name}</td>
             <td>{number}</td>
+            <td><button onClick={deleteHandler(id)} value={id}>Poista</button></td>
         </tr>
     )
 }

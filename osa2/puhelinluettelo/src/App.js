@@ -38,6 +38,23 @@ class App extends React.Component {
             })
     }
 
+    deletePerson = () => {
+        return (event) => {
+            let person = this.state.persons.find((p) => p.id === parseInt(event.target.value, 10))
+            window.confirm(`Poistetaanko ${person.name}`) ?
+                personService
+                    .destroy(person.id)
+                    .then(this.setState({
+                        persons: this.state.persons.filter((p) => p.id !== person.id),
+                        searchResults: this.state.persons.filter((p) => p.id !== person.id)
+                    }))
+                    .catch(error => {
+                        console.log(`Failed to delete person with id ${person.id} with error: ${error}`)
+                    }) :
+                console.log("Delete canceled")
+        }
+    }
+
     handleChange = (event) => {
         event.preventDefault()
         event.stopPropagation()
@@ -68,7 +85,8 @@ class App extends React.Component {
             .getAll()
             .then(persons => {
                 this.setState({
-                    persons: persons
+                    persons: persons,
+                    searchResults: persons
                 })
             })
     }
@@ -79,7 +97,7 @@ class App extends React.Component {
                 <h2>Puhelinluettelo</h2>
                 <Search
                     search={this.state.search}
-                    handler={this.handleSearch}
+                    searchHandler={this.handleSearch}
                 />
                 <h2>Lisää uusi</h2>
                 <AddPerson
@@ -88,7 +106,7 @@ class App extends React.Component {
                     newPerson={this.state.newPerson}
                 />
                 <h2>Numerot</h2>
-                <Content persons={this.state.searchResults}/>
+                <Content persons={this.state.searchResults} deleteHandler={this.deletePerson}/>
             </div>
         )
     }

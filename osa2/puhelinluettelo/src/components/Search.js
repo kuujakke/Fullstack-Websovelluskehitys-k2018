@@ -1,12 +1,12 @@
 import React from 'react'
 
-const Search = ({search, handler}) => {
+const Search = ({search, searchHandler}) => {
     return (
         <form>
             Rajaa näytettäviä:
             <input
                 value={search}
-                onChange={handler}
+                onChange={searchHandler}
             />
         </form>
     )
