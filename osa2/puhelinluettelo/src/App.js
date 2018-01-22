@@ -18,24 +18,45 @@ class App extends React.Component {
         }
     }
 
-    newPerson = () => {
+    newPerson = (event) => {
+        event.preventDefault()
+        const person = this.state.persons.find(p => p.name === this.state.newPerson.name)
+        person !== undefined ?
+            window.confirm(`${person.name} on jo luettelossa, korvataanko vanha numero uudella?`) ?
+                person.number = this.state.newPerson.number :
+                console.log("No person found")
+            : undefined
         const newPerson = {
             id: this.state.persons.length + 1,
             ...this.state.newPerson
         }
-        personService
-            .create(newPerson)
-            .then(newPerson => {
-                this.setState({
-                    persons: this.state.persons.concat(newPerson),
-                    newPerson: {
-                        name: '',
-                        number: ''
-                    },
-                    search: '',
-                    searchResults: this.state.persons.concat(newPerson)
+        person === undefined ?
+            personService
+                .create(newPerson)
+                .then(newPerson => {
+                    this.setState({
+                        persons: this.state.persons.concat(newPerson),
+                        newPerson: {
+                            name: '',
+                            number: ''
+                        },
+                        search: '',
+                        searchResults: this.state.persons.concat(newPerson)
+                    })
+                }) :
+            personService
+                .update(person.id, person)
+                .then(newPerson => {
+                    this.setState({
+                        newPerson: {
+                            name: '',
+                            number: ''
+                        },
+                        search: '',
+                        persons: this.state.persons.filter(p => p.id !== newPerson.id).concat(person),
+                        searchResults: this.state.persons.filter(p => p.id !== newPerson.id).concat(person)
+                    })
                 })
-            })
     }
 
     deletePerson = () => {
