@@ -1,0 +1,42 @@
+h1, h2, p, .kentta, label, td, button, input {
+    color: #49274A;
+    font-family: "Lato Hairline";
+    border-radius: 9px;
+    padding: 2px;
+    margin: 2px;
+}
+
+h1 {
+    font-size: 3em;
+    text-align: center;
+}
+
+input {
+    background-color: #F8EEE7;
+}
+
+.error {
+    background-color: firebrick;
+    color: #F8EEE7;
+    font-size: 1.5em;
+    font-family: "Lato";
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+}
+
+.success {
+    background-color: forestgreen;
+    color: #F8EEE7;
+    font-size: 1.5em;
+    font-family: "Lato";
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+}
+
+body {
+    background-color: #F4DECB;
+}

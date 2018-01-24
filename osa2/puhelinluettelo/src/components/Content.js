@@ -2,6 +2,7 @@ import React from 'react'
 
 const Content = ({persons, deleteHandler}) => {
     return (
+        <h2>Numerot</h2>,
         <table>
             <tbody><Persons persons={persons} deleteHandler={deleteHandler} /></tbody>
         </table>
