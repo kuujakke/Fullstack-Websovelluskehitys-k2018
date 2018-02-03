@@ -53,6 +53,7 @@ class App extends React.Component {
             personService
                 .update(person.id, person)
                 .then(updatedPerson => {
+                    console.log(updatedPerson)
                     this.setState({
                         newPerson: {
                             name: '',
