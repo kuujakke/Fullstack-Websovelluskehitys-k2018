@@ -31,40 +31,36 @@ class App extends React.Component {
                 return null
             }
         }
-        const newPerson = {
-            id: this.state.persons.map(p => p.id).reduce((c, i) => Math.max(c, i)) + 1,
-            ...this.state.newPerson
-        }
         person === undefined ?
             personService
-                .create(newPerson)
-                .then(newPerson => {
+                .create(this.state.newPerson)
+                .then(person => {
                     this.setState({
-                        persons: this.state.persons.concat(newPerson),
+                        persons: this.state.persons.concat(person),
                         newPerson: {
                             name: '',
                             number: ''
                         },
                         search: '',
-                        searchResults: this.state.persons.concat(newPerson)
+                        searchResults: this.state.persons.concat(person)
                     })
-                    this.flashMessage(`Henkilön ${newPerson.name} lisääminen luetteloon onnistui.`, 'success')
+                    this.flashMessage(`Henkilön ${person.name} lisääminen luetteloon onnistui.`, 'success')
                 })
                 .catch(error => {
-                    this.flashMessage(`Henkilön ${newPerson.name} lisääminen luetteloon epäonnistui.`, 'error')
+                    this.flashMessage(`Henkilön ${person.name} lisääminen luetteloon epäonnistui.`, 'error')
                     console.log(`Virhe: ${error}`)
                 }) :
             personService
                 .update(person.id, person)
-                .then(newPerson => {
+                .then(updatedPerson => {
                     this.setState({
                         newPerson: {
                             name: '',
                             number: ''
                         },
                         search: '',
-                        persons: this.state.persons.filter(p => p.id !== newPerson.id).concat(person),
-                        searchResults: this.state.persons.filter(p => p.id !== newPerson.id).concat(person)
+                        persons: this.state.persons.filter(p => p.id !== person.id).concat(updatedPerson),
+                        searchResults: this.state.persons.filter(p => p.id !== person.id).concat(updatedPerson)
                     })
                     this.flashMessage(`Henkilön ${person.name} tietojen päivittäminen onnistui.`, 'success')
                 })
@@ -76,7 +72,7 @@ class App extends React.Component {
 
     deletePerson = () => {
         return (event) => {
-            let person = this.state.persons.find((p) => p.id === parseInt(event.target.value, 10))
+            let person = this.state.persons.find((p) => p.id === event.target.value)
             person !== undefined ?
                 window.confirm(`Poistetaanko ${person.name}`) ?
                     personService
