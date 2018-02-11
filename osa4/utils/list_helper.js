@@ -13,7 +13,7 @@ const mostBlogs = (blogs) => {
         if (blogger) {
             blogger.blogs += 1
         } else {
-            bloggers.push({ author: blog.author, blogs: 1 })
+            bloggers.push({author: blog.author, blogs: 1})
         }
     })
     bloggers.sort((a, b) => a.blogs - b.blogs).reverse()
@@ -27,7 +27,7 @@ const mostLikes = (blogs) => {
         if (blogger) {
             blogger.votes += blog.likes
         } else {
-            bloggers.push({ author: blog.author, votes: blog.likes })
+            bloggers.push({author: blog.author, votes: blog.likes})
         }
     })
     bloggers.sort((a, b) => a.votes - b.votes).reverse()
@@ -38,5 +38,5 @@ module.exports = {
     totalLikes,
     favoriteBlog,
     mostBlogs,
-    mostLikes
+    mostLikes,
 }

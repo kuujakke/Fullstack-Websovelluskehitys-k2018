@@ -53,7 +53,7 @@ const emptyList = []
 
 const listWithOneBlog = [
     {
-        _id: '5a422aa71b54a676234d17f8',
+        _id: '5b422aa71b54a676234d17f8',
         title: 'Go To Statement Considered Harmful',
         author: 'Edsger W. Dijkstra',
         url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
@@ -65,7 +65,7 @@ const listWithOneBlog = [
 const favorite = blogs[2]
 
 const newItem = {
-    _id: '5a522ba71b54a676234d17f8',
+    _id: '5c522ba71b54a676234d17f8',
     title: 'Mostly Harmless',
     author: 'Douglas Adams',
     url: 'https://en.wikipedia.org/wiki/Mostly_Harmless',
@@ -74,10 +74,24 @@ const newItem = {
 }
 
 const newItemNoLikes = {
-    _id: '5a522ba71b54a676234f17f9',
+    _id: '5c522ba71b54a676234f17f9',
     title: 'The Restaurant at the End of the Universe',
     author: 'Douglas Adams',
     url: 'https://en.wikipedia.org/wiki/The_Restaurant_at_the_End_of_the_Universe',
+    __v: 0
+}
+
+const newItemNoTitle = {
+    _id: '5b534ba71b54a676234f17f9',
+    author: 'Douglas Adams',
+    url: 'https://en.wikipedia.org/wiki/The_Restaurant_at_the_End_of_the_Universe',
+    __v: 0
+}
+
+const newItemNoUrl = {
+    _id: '6f522ba71b54a676234f17f9',
+    title: 'Life, the Universe and Everything',
+    author: 'Douglas Adams',
     __v: 0
 }
 
@@ -87,5 +101,7 @@ module.exports = {
     emptyList,
     favorite,
     newItem,
-    newItemNoLikes
+    newItemNoLikes,
+    newItemNoTitle,
+    newItemNoUrl
 }
