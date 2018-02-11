@@ -1,5 +1,5 @@
 const listHelper = require('../utils/list_helper')
-const testData = require('./initial_data')
+const testData = require('./test_data')
 
 describe('total likes', () => {
     test('when list has only one blog equals the likes of that', () => {

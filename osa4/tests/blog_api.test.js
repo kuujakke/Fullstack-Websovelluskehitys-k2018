@@ -2,7 +2,7 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const testData = require('./initial_data')
+const testData = require('./test_data')
 
 beforeAll(async () => {
     await Blog.remove({})
@@ -24,6 +24,21 @@ describe('GET request on /api/blogs', () => {
         testData.blogs.forEach(blog => {
             expect(response.body).toContainEqual(blog)
         })
+    })
+})
+
+describe('POST request on /api/blogs', () => {
+    test('201 status code is returned as json when new item is added', async () => {
+        await api
+            .post('/api/blogs')
+            .send(testData.newItem)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+    })
+
+    test('bloglist now contains new item', async () => {
+        const response = await api.get('/api/blogs')
+        expect(response.body).toContainEqual(testData.newItem)
     })
 })
 

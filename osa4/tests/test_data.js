@@ -64,9 +64,19 @@ const listWithOneBlog = [
 
 const favorite = blogs[2]
 
+const newItem = {
+    _id: '5a522ba71b54a676234d17f8',
+    title: 'Mostly Harmless',
+    author: 'Douglas Adams',
+    url: 'https://en.wikipedia.org/wiki/Mostly_Harmless',
+    likes: 42,
+    __v: 0
+}
+
 module.exports = {
     blogs,
     listWithOneBlog,
     emptyList,
-    favorite
+    favorite,
+    newItem
 }
