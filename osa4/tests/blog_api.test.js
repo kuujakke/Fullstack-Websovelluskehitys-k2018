@@ -40,6 +40,18 @@ describe('POST request on /api/blogs', () => {
         const response = await api.get('/api/blogs')
         expect(response.body).toContainEqual(testData.newItem)
     })
+
+    test('When new item has no likes it should have 0 likes', async () => {
+        await api
+            .post('/api/blogs')
+            .send(testData.newItemNoLikes)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const response = await api.get('/api/blogs')
+        const addedItem = response.body.find(i => i._id === testData.newItemNoLikes._id)
+        expect(addedItem.likes).toEqual(0)
+    })
 })
 
 afterAll(() => {

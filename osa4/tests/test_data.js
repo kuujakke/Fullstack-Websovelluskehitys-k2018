@@ -73,10 +73,19 @@ const newItem = {
     __v: 0
 }
 
+const newItemNoLikes = {
+    _id: '5a522ba71b54a676234f17f9',
+    title: 'The Restaurant at the End of the Universe',
+    author: 'Douglas Adams',
+    url: 'https://en.wikipedia.org/wiki/The_Restaurant_at_the_End_of_the_Universe',
+    __v: 0
+}
+
 module.exports = {
     blogs,
     listWithOneBlog,
     emptyList,
     favorite,
-    newItem
+    newItem,
+    newItemNoLikes
 }
