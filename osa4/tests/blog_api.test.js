@@ -72,7 +72,6 @@ describe('POST request on /api/blogs', () => {
 })
 
 describe('DELETE request on /api/blogs/:id', () => {
-
     beforeAll(async () => {
         await Blog.remove({})
         await Blog.insertMany(testData.blogs)
@@ -85,10 +84,46 @@ describe('DELETE request on /api/blogs/:id', () => {
             await api.delete(`/api/blogs/${newItem._id}`).expect(200)
         })
 
-        test('a non-existing blog it responds with 404',
-            async () => {
-                const validNonExistingId = await helper.nonExistingId()
-                await api.delete(`/api/blogs/${validNonExistingId}`).expect(404)
+        test('a non-existing blog it responds with 404', async () => {
+            const validNonExistingId = await helper.nonExistingId()
+            await api.delete(`/api/blogs/${validNonExistingId}`).expect(404)
+        })
+    })
+})
+
+describe('PUT request on /api/blogs/:id', () => {
+    beforeAll(async () => {
+        await Blog.remove({})
+        await Blog.insertMany(testData.blogs)
+    })
+    describe('When id is', () => {
+        test('a existing blog it can be updated', async () => {
+            const newItem = {
+                ...testData.newItem,
+                _id: '5c542ba78b48a606234f17f9',
+            }
+            await helper.saveBlog(newItem)
+
+            const updatedItem = {
+                id: newItem._id,
+                title: 'Elämäni eläimet',
+                author: 'Sauli Niinistö',
+                likes: newItem.likes + 1,
+            }
+            
+            await api.put(`/api/blogs/${updatedItem.id}`).
+                send(updatedItem).
+                expect(200)
+            const blog = await helper.findInDb(updatedItem.id)
+            expect(blog.title).toEqual(updatedItem.title)
+            expect(blog.author).toEqual(updatedItem.author)
+            expect(blog.url).toEqual(newItem.url)
+            expect(blog.likes).toEqual(newItem.likes + 1)
+        })
+
+        test('a non-existing blog it responds with 404', async () => {
+            const validNonExistingId = await helper.nonExistingId()
+            await api.delete(`/api/blogs/${validNonExistingId}`).expect(404)
         })
     })
 })

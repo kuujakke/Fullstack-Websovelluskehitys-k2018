@@ -42,12 +42,23 @@ const format = (blog) => {
         author: blog.author,
         url: blog.url,
         id: blog._id,
+        likes: blog.likes,
     }
 }
 
 const blogsInDb = async () => {
     const blogs = await Blog.find({})
     return blogs.map(format)
+}
+
+const findInDb = async (id) => {
+    const blog = await Blog.findById(id)
+    return format(blog)
+}
+
+const saveBlog = async (newBlog) => {
+    const blog = new Blog(newBlog)
+    await blog.save()
 }
 
 const nonExistingId = async () => {
@@ -64,6 +75,8 @@ module.exports = {
     mostBlogs,
     mostLikes,
     blogsInDb,
+    findInDb,
     format,
     nonExistingId,
+    saveBlog,
 }

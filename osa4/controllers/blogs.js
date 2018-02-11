@@ -27,14 +27,27 @@ blogsRouter.post('/', (request, response) => {
 
 blogsRouter.delete('/:id', async (request, response) => {
     try {
-        const res = await Blog.findOneAndRemove({_id: request.params.id})
+        const res = await Blog.findByIdAndRemove(request.params.id)
         if (res) {
             response.status(200).end()
         } else {
             response.status(404).end()
         }
     } catch (exception) {
-        response.status(500).end()
+        response.status(500).json(exception)
+    }
+})
+
+blogsRouter.put('/:id', async (request, response) => {
+    try {
+        const res = await Blog.findByIdAndUpdate(request.params.id, request.body)
+        if (res) {
+            response.status(200).end()
+        } else {
+            response.status(404).end()
+        }
+    } catch (exception) {
+        response.status(500).json(exception)
     }
 })
 
