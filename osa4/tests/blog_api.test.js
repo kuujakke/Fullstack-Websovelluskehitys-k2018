@@ -58,12 +58,37 @@ describe('POST request on /api/blogs', () => {
             expect(addedItem.likes).toEqual(0)
         })
 
-        test('has undefined title it should respond with code 400', async () => {
-            await api.post('/api/blogs').send(testData.newItemNoTitle).expect(400)
-        })
+        test('has undefined title it should respond with code 400',
+            async () => {
+                await api.post('/api/blogs').
+                    send(testData.newItemNoTitle).
+                    expect(400)
+            })
 
         test('has undefined url it should respond with code 400', async () => {
             await api.post('/api/blogs').send(testData.newItemNoUrl).expect(400)
+        })
+    })
+})
+
+describe('DELETE request on /api/blogs/:id', () => {
+
+    beforeAll(async () => {
+        await Blog.remove({})
+        await Blog.insertMany(testData.blogs)
+    })
+    describe('When id is', () => {
+        test('a existing blog it can be deleted', async () => {
+            const newItem = testData.newItem
+            newItem._id = '5c542ba78b44a676234f17f9'
+            await api.post('/api/blogs').send(newItem)
+            await api.delete(`/api/blogs/${newItem._id}`).expect(200)
+        })
+
+        test('a non-existing blog it responds with 404',
+            async () => {
+                const validNonExistingId = await helper.nonExistingId()
+                await api.delete(`/api/blogs/${validNonExistingId}`).expect(404)
         })
     })
 })

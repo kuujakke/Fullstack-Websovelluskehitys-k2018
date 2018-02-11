@@ -50,11 +50,20 @@ const blogsInDb = async () => {
     return blogs.map(format)
 }
 
+const nonExistingId = async () => {
+    const blog = new Blog()
+    await blog.save()
+    await blog.remove()
+
+    return blog._id.toString()
+}
+
 module.exports = {
     totalLikes,
     favoriteBlog,
     mostBlogs,
     mostLikes,
     blogsInDb,
-    format
+    format,
+    nonExistingId,
 }
