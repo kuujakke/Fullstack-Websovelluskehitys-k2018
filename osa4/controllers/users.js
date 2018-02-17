@@ -15,6 +15,16 @@ usersRouter.post('/', async (request, response) => {
     try {
         const body = request.body
 
+        if (body.password){
+            if (body.password.length < 3) {
+                response.status(400).json({error: 'Password is too short!'})
+                return
+            }
+        } else {
+            response.status(400).json({error: 'Undefined password'})
+            return
+        }
+
         const saltRounds = 10
         const passwordHash = await bcrypt.hash(body.password, saltRounds)
 
@@ -26,11 +36,19 @@ usersRouter.post('/', async (request, response) => {
         })
 
         const savedUser = await user.save()
-
         response.status(201).json(savedUser)
+
     } catch (exception) {
-        console.log(exception)
-        response.status(500).json({error: 'something went wrong...'})
+        if (exception.code === 11000) {
+            response.status(400).json({error: 'Duplicate key error!'})
+        } else if (exception.name === 'ValidationError') {
+            response.status(400).json({error: 'Validation error!'})
+        } else if (exception.name === 'TypeError') {
+            response.status(400).json({error: 'Type error!'})
+        } else {
+            console.log(exception.name)
+            response.status(500).json({error: 'Something went horribly wrong!'})
+        }
     }
 })
 

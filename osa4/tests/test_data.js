@@ -1,52 +1,52 @@
 const blogs = [
     {
-        _id: "5a422a851b54a676234d17f7",
-        title: "React patterns",
-        author: "Michael Chan",
-        url: "https://reactpatterns.com/",
+        _id: '5a422a851b54a676234d17f7',
+        title: 'React patterns',
+        author: 'Michael Chan',
+        url: 'https://reactpatterns.com/',
         likes: 7,
-        __v: 0
+        __v: 0,
     },
     {
-        _id: "5a422aa71b54a676234d17f8",
-        title: "Go To Statement Considered Harmful",
-        author: "Edsger W. Dijkstra",
-        url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+        _id: '5a422aa71b54a676234d17f8',
+        title: 'Go To Statement Considered Harmful',
+        author: 'Edsger W. Dijkstra',
+        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
         likes: 5,
-        __v: 0
+        __v: 0,
     },
     {
-        _id: "5a422b3a1b54a676234d17f9",
-        title: "Canonical string reduction",
-        author: "Edsger W. Dijkstra",
-        url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+        _id: '5a422b3a1b54a676234d17f9',
+        title: 'Canonical string reduction',
+        author: 'Edsger W. Dijkstra',
+        url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
         likes: 12,
-        __v: 0
+        __v: 0,
     },
     {
-        _id: "5a422b891b54a676234d17fa",
-        title: "First class tests",
-        author: "Robert C. Martin",
-        url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+        _id: '5a422b891b54a676234d17fa',
+        title: 'First class tests',
+        author: 'Robert C. Martin',
+        url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
         likes: 10,
-        __v: 0
+        __v: 0,
     },
     {
-        _id: "5a422ba71b54a676234d17fb",
-        title: "TDD harms architecture",
-        author: "Robert C. Martin",
-        url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
+        _id: '5a422ba71b54a676234d17fb',
+        title: 'TDD harms architecture',
+        author: 'Robert C. Martin',
+        url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
         likes: 0,
-        __v: 0
+        __v: 0,
     },
     {
-        _id: "5a422bc61b54a676234d17fc",
-        title: "Type wars",
-        author: "Robert C. Martin",
-        url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+        _id: '5a422bc61b54a676234d17fc',
+        title: 'Type wars',
+        author: 'Robert C. Martin',
+        url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
         likes: 2,
-        __v: 0
-    }
+        __v: 0,
+    },
 ]
 
 const emptyList = []
@@ -58,8 +58,8 @@ const listWithOneBlog = [
         author: 'Edsger W. Dijkstra',
         url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
         likes: 5,
-        __v: 0
-    }
+        __v: 0,
+    },
 ]
 
 const favorite = blogs[2]
@@ -76,47 +76,54 @@ const newBlogNoLikes = {
     title: 'The Restaurant at the End of the Universe',
     author: 'Douglas Adams',
     url: 'https://en.wikipedia.org/wiki/The_Restaurant_at_the_End_of_the_Universe',
-    __v: 0
+    __v: 0,
 }
 
 const newBlogNoTitle = {
     _id: '5b534ba71b54a676234f17f9',
     author: 'Douglas Adams',
     url: 'https://en.wikipedia.org/wiki/The_Restaurant_at_the_End_of_the_Universe',
-    __v: 0
+    __v: 0,
 }
 
 const newBlogNoUrl = {
     _id: '6f522ba71b54a676234f17f9',
     title: 'Life, the Universe and Everything',
     author: 'Douglas Adams',
-    __v: 0
+    __v: 0,
 }
 
 const users = [
     {
         _id: '6f525ba73b56a676234f17f9',
-        username: "kuujakke",
-        name: "Jakke Kuukkanen",
-        passwordHash: "asdasdasdqwe",
+        username: 'kuujakke',
+        name: 'Jakke Kuukkanen',
+        passwordHash: 'asdasdasdqwe',
         adult: true,
-        __v: 0
+        __v: 0,
     },
     {
         _id: '6f525b273bf6a6e6234f17f9',
-        username: "pikmyy",
-        name: "Pikku Myy",
-        passwordHash: "asdqweasdqwe",
+        username: 'pikmyy',
+        name: 'Pikku Myy',
+        passwordHash: 'asdqweasdqwe',
         adult: false,
-        __v: 0
-    }
+        __v: 0,
+    },
 ]
 
 const newUser = {
-    username: "muupeikk",
-    name: "Muumi Peikko",
-    password: "asdasdqweqwea",
-    adult: true,
+    username: 'muupeik',
+    name: 'Muumipeikko',
+    password: 'asdasdqweqwea',
+    adult: false,
+}
+
+const nonAdultUser = {
+    username: 'niineit',
+    name: 'Niiskuneiti',
+    password: 'salainen',
+    adult: false,
 }
 
 module.exports = {
@@ -130,4 +137,5 @@ module.exports = {
     newBlogNoUrl,
     users,
     newUser,
+    nonAdultUser
 }

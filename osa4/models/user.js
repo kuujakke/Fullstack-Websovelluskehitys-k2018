@@ -1,10 +1,20 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-    username: String,
+    username: {
+        required: true,
+        type: String,
+        unique: true
+    },
     name: String,
-    passwordHash: String,
-    adult: Boolean,
+    passwordHash: {
+        type: String,
+        required: true,
+    },
+    adult: {
+        type: Boolean,
+        default: true,
+    },
 })
 
 userSchema.statics.format = (user) => {
