@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
+    blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog' }],
 })
 
 userSchema.statics.format = (user) => {
@@ -23,6 +24,7 @@ userSchema.statics.format = (user) => {
         username: user.username,
         name: user.name,
         adult: user.adult,
+        blogs: user.blogs
     }
 }
 

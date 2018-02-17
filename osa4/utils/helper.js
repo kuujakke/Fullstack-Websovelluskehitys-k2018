@@ -48,12 +48,14 @@ const format = (blog) => {
 }
 
 const blogsInDb = async () => {
-    const blogs = await Blog.find({})
-    return blogs.map(format)
+    const blogs = await Blog.find({}).
+        populate('user', {username: 1, name: 1})
+    return blogs.map(Blog.format)
 }
 
 const usersInDb = async () => {
-    const users = await User.find({})
+    const users = await User.find({}).
+        populate('blogs', {title: 1, author: 1, url: 1, likes: 1})
     return users.map(User.format)
 }
 
@@ -85,5 +87,5 @@ module.exports = {
     format,
     nonExistingId,
     saveBlog,
-    usersInDb
+    usersInDb,
 }

@@ -5,6 +5,7 @@ const blogs = [
         author: 'Michael Chan',
         url: 'https://reactpatterns.com/',
         likes: 7,
+        user: '6f525ba73b56a676234f17f9',
         __v: 0,
     },
     {
@@ -13,6 +14,7 @@ const blogs = [
         author: 'Edsger W. Dijkstra',
         url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
         likes: 5,
+        user: '6f525b273bf6a6e6234f17f9',
         __v: 0,
     },
     {
@@ -21,6 +23,7 @@ const blogs = [
         author: 'Edsger W. Dijkstra',
         url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
         likes: 12,
+        user: '6f525ba73b56a676234f17f9',
         __v: 0,
     },
     {
@@ -29,6 +32,7 @@ const blogs = [
         author: 'Robert C. Martin',
         url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
         likes: 10,
+        user: '6f525b273bf6a6e6234f17f9',
         __v: 0,
     },
     {
@@ -37,6 +41,7 @@ const blogs = [
         author: 'Robert C. Martin',
         url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
         likes: 0,
+        user: '6f525ba73b56a676234f17f9',
         __v: 0,
     },
     {
@@ -45,6 +50,7 @@ const blogs = [
         author: 'Robert C. Martin',
         url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
         likes: 2,
+        user: '6f525b273bf6a6e6234f17f9',
         __v: 0,
     },
 ]
@@ -58,6 +64,7 @@ const listWithOneBlog = [
         author: 'Edsger W. Dijkstra',
         url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
         likes: 5,
+        user: '6f525b273bf6a6e6234f17f9',
         __v: 0,
     },
 ]
@@ -69,6 +76,7 @@ const newBlog = {
     author: 'Douglas Adams',
     url: 'https://en.wikipedia.org/wiki/Mostly_Harmless',
     likes: 42,
+    user: '6f525b273bf6a6e6234f17f9',
 }
 
 const newBlogNoLikes = {
@@ -76,6 +84,7 @@ const newBlogNoLikes = {
     title: 'The Restaurant at the End of the Universe',
     author: 'Douglas Adams',
     url: 'https://en.wikipedia.org/wiki/The_Restaurant_at_the_End_of_the_Universe',
+    user: '6f525b273bf6a6e6234f17f9',
     __v: 0,
 }
 
@@ -83,6 +92,7 @@ const newBlogNoTitle = {
     _id: '5b534ba71b54a676234f17f9',
     author: 'Douglas Adams',
     url: 'https://en.wikipedia.org/wiki/The_Restaurant_at_the_End_of_the_Universe',
+    user: '6f525b273bf6a6e6234f17f9',
     __v: 0,
 }
 
@@ -90,6 +100,7 @@ const newBlogNoUrl = {
     _id: '6f522ba71b54a676234f17f9',
     title: 'Life, the Universe and Everything',
     author: 'Douglas Adams',
+    user: '6f525b273bf6a6e6234f17f9',
     __v: 0,
 }
 
@@ -100,6 +111,7 @@ const users = [
         name: 'Jakke Kuukkanen',
         passwordHash: 'asdasdasdqwe',
         adult: true,
+        blogs: ['5a422a851b54a676234d17f7', '5a422b3a1b54a676234d17f9', '5a422ba71b54a676234d17fb'],
         __v: 0,
     },
     {
@@ -108,6 +120,7 @@ const users = [
         name: 'Pikku Myy',
         passwordHash: 'asdqweasdqwe',
         adult: false,
+        blogs: ['5a422aa71b54a676234d17f8', '5a422b891b54a676234d17fa', '5a422bc61b54a676234d17fc'],
         __v: 0,
     },
 ]

@@ -4,7 +4,8 @@ const User = require('../models/user')
 
 usersRouter.get('/', async (request, response) => {
     try {
-        const users = await User.find({})
+        const users = await User.find({}).
+            populate('blogs', {title: 1, author: 1, url: 1, likes: 1})
         response.status(200).json(users.map(User.format))
     } catch (exception) {
         response.status(500).json(exception)
@@ -15,7 +16,7 @@ usersRouter.post('/', async (request, response) => {
     try {
         const body = request.body
 
-        if (body.password){
+        if (body.password) {
             if (body.password.length < 3) {
                 response.status(400).json({error: 'Password is too short!'})
                 return

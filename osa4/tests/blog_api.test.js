@@ -5,7 +5,7 @@ const Blog = require('../models/blog')
 const testData = require('./test_data')
 const helper = require('../utils/helper')
 
-beforeAll(async () => {
+beforeEach(async () => {
     await Blog.remove({})
     await Blog.insertMany(testData.blogs)
 })
@@ -18,11 +18,16 @@ describe('GET request on /api/blogs', () => {
     })
 
     test('blogs are returned in an array', async () => {
+        const blogs = await helper.blogsInDb()
         const response = await api.get('/api/blogs')
-        expect(response.body.length).toBe(testData.blogs.length)
-        testData.blogs.forEach(blog => {
-            expect(response.body).toContainEqual(blog)
-        })
+        expect(response.body.length).toBe(blogs.length)
+    })
+
+    test('blogs should have a user field populated', async () => {
+        const response = await api.get('/api/blogs')
+        const users = await helper.usersInDb()
+        response.body.forEach(b => expect(users.map(u => u.username)).
+            toContainEqual(b.user.username))
     })
 })
 
@@ -47,15 +52,11 @@ describe('POST request on /api/blogs', () => {
 
     describe('When a new item', () => {
         test('has undefined likes it should have 0 likes', async () => {
-            await api.post('/api/blogs').
+            const response = await api.post('/api/blogs').
                 send(testData.newBlogNoLikes).
                 expect(201).
                 expect('Content-Type', /application\/json/)
-
-            const response = await api.get('/api/blogs')
-            const addedItem = response.body.find(
-                i => i._id === testData.newBlogNoLikes._id)
-            expect(addedItem.likes).toEqual(0)
+            expect(response.body.likes).toEqual(0)
         })
 
         test('has undefined title it should respond with code 400',
@@ -110,7 +111,7 @@ describe('PUT request on /api/blogs/:id', () => {
                 author: 'Sauli Niinistö',
                 likes: newItem.likes + 1,
             }
-            
+
             await api.put(`/api/blogs/${updatedItem.id}`).
                 send(updatedItem).
                 expect(200)

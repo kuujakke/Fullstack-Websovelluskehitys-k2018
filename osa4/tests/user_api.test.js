@@ -5,7 +5,7 @@ const User = require('../models/user')
 const testData = require('./test_data')
 const helper = require('../utils/helper')
 
-beforeAll(async () => {
+beforeEach(async () => {
     await User.remove({})
     await User.insertMany(testData.users)
 })
@@ -18,11 +18,9 @@ describe('GET request on /api/users', () => {
     })
 
     test('initial users are returned in an array', async () => {
+        const users = await helper.usersInDb()
         const response = await api.get('/api/users')
-        expect(response.body.length).toBe(testData.users.length)
-        testData.users.forEach(user => {
-            expect(response.body).toContainEqual(User.format(user))
-        })
+        expect(response.body.length).toBe(users.length)
     })
 })
 
@@ -45,6 +43,9 @@ describe('POST request on /api/users', () => {
     describe('when username is', () => {
         test('duplicate, user should be rejected', async () => {
             const newUser = testData.newUser
+            await api.post('/api/users').
+                send(newUser).
+                expect(201)
             const response = await api.post('/api/users').
                 send(newUser).
                 expect(400)
