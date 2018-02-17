@@ -64,14 +64,14 @@ const listWithOneBlog = [
 
 const favorite = blogs[2]
 
-const newItem = {
+const newBlog = {
     title: 'Mostly Harmless',
     author: 'Douglas Adams',
     url: 'https://en.wikipedia.org/wiki/Mostly_Harmless',
     likes: 42,
 }
 
-const newItemNoLikes = {
+const newBlogNoLikes = {
     _id: '5c522ba71b54a676234f17f9',
     title: 'The Restaurant at the End of the Universe',
     author: 'Douglas Adams',
@@ -79,18 +79,44 @@ const newItemNoLikes = {
     __v: 0
 }
 
-const newItemNoTitle = {
+const newBlogNoTitle = {
     _id: '5b534ba71b54a676234f17f9',
     author: 'Douglas Adams',
     url: 'https://en.wikipedia.org/wiki/The_Restaurant_at_the_End_of_the_Universe',
     __v: 0
 }
 
-const newItemNoUrl = {
+const newBlogNoUrl = {
     _id: '6f522ba71b54a676234f17f9',
     title: 'Life, the Universe and Everything',
     author: 'Douglas Adams',
     __v: 0
+}
+
+const users = [
+    {
+        _id: '6f525ba73b56a676234f17f9',
+        username: "kuujakke",
+        name: "Jakke Kuukkanen",
+        passwordHash: "asdasdasdqwe",
+        adult: true,
+        __v: 0
+    },
+    {
+        _id: '6f525b273bf6a6e6234f17f9',
+        username: "pikmyy",
+        name: "Pikku Myy",
+        passwordHash: "asdqweasdqwe",
+        adult: false,
+        __v: 0
+    }
+]
+
+const newUser = {
+    username: "muupeikk",
+    name: "Muumi Peikko",
+    password: "asdasdqweqwea",
+    adult: true,
 }
 
 module.exports = {
@@ -98,8 +124,10 @@ module.exports = {
     listWithOneBlog,
     emptyList,
     favorite,
-    newItem,
-    newItemNoLikes,
-    newItemNoTitle,
-    newItemNoUrl,
+    newBlog,
+    newBlogNoLikes,
+    newBlogNoTitle,
+    newBlogNoUrl,
+    users,
+    newUser,
 }

@@ -28,7 +28,7 @@ describe('GET request on /api/blogs', () => {
 
 describe('POST request on /api/blogs', () => {
     test('a valid blog can be added', async () => {
-        const newItem = testData.newItem
+        const newItem = testData.newBlog
 
         const blogsBefore = await helper.blogsInDb()
 
@@ -48,25 +48,25 @@ describe('POST request on /api/blogs', () => {
     describe('When a new item', () => {
         test('has undefined likes it should have 0 likes', async () => {
             await api.post('/api/blogs').
-                send(testData.newItemNoLikes).
+                send(testData.newBlogNoLikes).
                 expect(201).
                 expect('Content-Type', /application\/json/)
 
             const response = await api.get('/api/blogs')
             const addedItem = response.body.find(
-                i => i._id === testData.newItemNoLikes._id)
+                i => i._id === testData.newBlogNoLikes._id)
             expect(addedItem.likes).toEqual(0)
         })
 
         test('has undefined title it should respond with code 400',
             async () => {
                 await api.post('/api/blogs').
-                    send(testData.newItemNoTitle).
+                    send(testData.newBlogNoTitle).
                     expect(400)
             })
 
         test('has undefined url it should respond with code 400', async () => {
-            await api.post('/api/blogs').send(testData.newItemNoUrl).expect(400)
+            await api.post('/api/blogs').send(testData.newBlogNoUrl).expect(400)
         })
     })
 })
@@ -78,7 +78,7 @@ describe('DELETE request on /api/blogs/:id', () => {
     })
     describe('When id is', () => {
         test('a existing blog it can be deleted', async () => {
-            const newItem = testData.newItem
+            const newItem = testData.newBlog
             newItem._id = '5c542ba78b44a676234f17f9'
             await api.post('/api/blogs').send(newItem)
             await api.delete(`/api/blogs/${newItem._id}`).expect(200)
@@ -99,7 +99,7 @@ describe('PUT request on /api/blogs/:id', () => {
     describe('When id is', () => {
         test('a existing blog it can be updated', async () => {
             const newItem = {
-                ...testData.newItem,
+                ...testData.newBlog,
                 _id: '5c542ba78b48a606234f17f9',
             }
             await helper.saveBlog(newItem)

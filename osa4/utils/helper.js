@@ -1,4 +1,5 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const totalLikes = (blogs) => {
     return blogs.reduce(((sum, blog) => sum += blog.likes), 0)
@@ -51,6 +52,11 @@ const blogsInDb = async () => {
     return blogs.map(format)
 }
 
+const usersInDb = async () => {
+    const users = await User.find({})
+    return users.map(User.format)
+}
+
 const findInDb = async (id) => {
     const blog = await Blog.findById(id)
     return format(blog)
@@ -79,4 +85,5 @@ module.exports = {
     format,
     nonExistingId,
     saveBlog,
+    usersInDb
 }
