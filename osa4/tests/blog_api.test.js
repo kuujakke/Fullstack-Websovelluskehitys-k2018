@@ -5,11 +5,6 @@ const Blog = require('../models/blog')
 const testData = require('./test_data')
 const helper = require('../utils/helper')
 
-beforeEach(async () => {
-    await Blog.remove({})
-    await Blog.insertMany(testData.blogs)
-})
-
 describe('GET request on /api/blogs', () => {
     test('blogs are returned as json', async () => {
         await api.get('/api/blogs').
@@ -18,30 +13,33 @@ describe('GET request on /api/blogs', () => {
     })
 
     test('blogs are returned in an array', async () => {
-        const blogs = await helper.blogsInDb()
         const response = await api.get('/api/blogs')
-        expect(response.body.length).toBe(blogs.length)
+        expect(response.body[0]).toBeDefined()
     })
 
     test('blogs should have a user field populated', async () => {
         const response = await api.get('/api/blogs')
         const users = await helper.usersInDb()
-        response.body.forEach(b => expect(users.map(u => u.username)).
-            toContainEqual(b.user.username))
+        expect(users.map(u => u.username)).
+            toContainEqual(helper.pickRandom(response.body).user.username)
     })
 })
 
 describe('POST request on /api/blogs', () => {
     test('a valid blog can be added', async () => {
+        const user = await helper.randomUser()
+        const token = helper.getToken(user.id, user.username)
+
         const newItem = testData.newBlog
 
         const blogsBefore = await helper.blogsInDb()
 
-        await api.post('/api/blogs').
+        const response = await api.post('/api/blogs').
+            set('Authorization', `Bearer ${token}`).
             send(newItem).
             expect(201).
             expect('Content-Type', /application\/json/)
-
+        expect(response.body.user).toEqual(user.id.toString())
         const blogsAfter = await helper.blogsInDb()
 
         expect(blogsAfter.length).toBe(blogsBefore.length + 1)
@@ -51,8 +49,14 @@ describe('POST request on /api/blogs', () => {
     })
 
     describe('When a new item', () => {
+        beforeEach(async () => {
+            await helper.resetDatabase(testData.users, testData.blogs)
+        })
         test('has undefined likes it should have 0 likes', async () => {
+            const user = await helper.randomUser()
+            const token = helper.getToken(user.id, user.username)
             const response = await api.post('/api/blogs').
+                set('Authorization', `Bearer ${token}`).
                 send(testData.newBlogNoLikes).
                 expect(201).
                 expect('Content-Type', /application\/json/)
@@ -61,27 +65,33 @@ describe('POST request on /api/blogs', () => {
 
         test('has undefined title it should respond with code 400',
             async () => {
+                const user = await helper.randomUser()
+                const token = helper.getToken(user.id, user.username)
+
                 await api.post('/api/blogs').
+                    set('Authorization', `Bearer ${token}`).
                     send(testData.newBlogNoTitle).
                     expect(400)
             })
 
         test('has undefined url it should respond with code 400', async () => {
-            await api.post('/api/blogs').send(testData.newBlogNoUrl).expect(400)
+            const user = await helper.randomUser()
+            const token = helper.getToken(user.id, user.username)
+
+            await api.post('/api/blogs').
+                set('Authorization', `Bearer ${token}`).
+                send(testData.newBlogNoUrl).
+                expect(400)
         })
     })
 })
 
 describe('DELETE request on /api/blogs/:id', () => {
-    beforeAll(async () => {
-        await Blog.remove({})
-        await Blog.insertMany(testData.blogs)
-    })
     describe('When id is', () => {
         test('a existing blog it can be deleted', async () => {
             const newItem = testData.newBlog
             newItem._id = '5c542ba78b44a676234f17f9'
-            await api.post('/api/blogs').send(newItem)
+            await Blog.create(newItem)
             await api.delete(`/api/blogs/${newItem._id}`).expect(200)
         })
 
@@ -93,20 +103,15 @@ describe('DELETE request on /api/blogs/:id', () => {
 })
 
 describe('PUT request on /api/blogs/:id', () => {
-    beforeAll(async () => {
-        await Blog.remove({})
-        await Blog.insertMany(testData.blogs)
-    })
     describe('When id is', () => {
         test('a existing blog it can be updated', async () => {
             const newItem = {
                 ...testData.newBlog,
-                _id: '5c542ba78b48a606234f17f9',
             }
-            await helper.saveBlog(newItem)
+            const item = await helper.addBlog(newItem)
 
             const updatedItem = {
-                id: newItem._id,
+                id: item._id,
                 title: 'Elämäni eläimet',
                 author: 'Sauli Niinistö',
                 likes: newItem.likes + 1,
@@ -115,7 +120,7 @@ describe('PUT request on /api/blogs/:id', () => {
             await api.put(`/api/blogs/${updatedItem.id}`).
                 send(updatedItem).
                 expect(200)
-            const blog = await helper.findInDb(updatedItem.id)
+            const blog = await helper.findBlogInDb(updatedItem.id)
             expect(blog.title).toEqual(updatedItem.title)
             expect(blog.author).toEqual(updatedItem.author)
             expect(blog.url).toEqual(newItem.url)
@@ -129,6 +134,7 @@ describe('PUT request on /api/blogs/:id', () => {
     })
 })
 
-afterAll(() => {
+afterAll(async () => {
+    await helper.resetDatabase(testData.users, testData.blogs)
     server.close()
 })
