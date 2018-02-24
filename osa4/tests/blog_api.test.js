@@ -89,15 +89,21 @@ describe('POST request on /api/blogs', () => {
 describe('DELETE request on /api/blogs/:id', () => {
     describe('When id is', () => {
         test('a existing blog it can be deleted', async () => {
-            const newItem = testData.newBlog
-            newItem._id = '5c542ba78b44a676234f17f9'
-            await Blog.create(newItem)
-            await api.delete(`/api/blogs/${newItem._id}`).expect(200)
+            const user = await helper.randomUser()
+            const token = helper.getToken(user.id, user.username)
+            const savedItem = await Blog.create(testData.newBlog)
+            await api.delete(`/api/blogs/${savedItem._id}`).
+                set('Authorization', `Bearer ${token}`).
+                expect(200)
         })
 
         test('a non-existing blog it responds with 404', async () => {
+            const user = await helper.randomUser()
+            const token = helper.getToken(user.id, user.username)
             const validNonExistingId = await helper.nonExistingId()
-            await api.delete(`/api/blogs/${validNonExistingId}`).expect(404)
+            await api.delete(`/api/blogs/${validNonExistingId}`).
+                set('Authorization', `Bearer ${token}`).
+                expect(404)
         })
     })
 })
@@ -129,7 +135,7 @@ describe('PUT request on /api/blogs/:id', () => {
 
         test('a non-existing blog it responds with 404', async () => {
             const validNonExistingId = await helper.nonExistingId()
-            await api.delete(`/api/blogs/${validNonExistingId}`).expect(404)
+            await api.put(`/api/blogs/${validNonExistingId}`).expect(404)
         })
     })
 })
