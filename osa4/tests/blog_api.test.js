@@ -1,7 +1,6 @@
 const supertest = require('supertest')
 const {app, server} = require('../index')
 const api = supertest(app)
-const Blog = require('../models/blog')
 const testData = require('./test_data')
 const helper = require('../utils/helper')
 
@@ -88,22 +87,50 @@ describe('POST request on /api/blogs', () => {
 
 describe('DELETE request on /api/blogs/:id', () => {
     describe('When id is', () => {
-        test('a existing blog it can be deleted', async () => {
-            const user = await helper.randomUser()
-            const token = helper.getToken(user.id, user.username)
-            const savedItem = await Blog.create(testData.newBlog)
-            await api.delete(`/api/blogs/${savedItem._id}`).
-                set('Authorization', `Bearer ${token}`).
-                expect(200)
-        })
+        describe('existing blog', () => {
+            test('belonging to user with valid token it can be deleted',
+                async () => {
+                    const user = await helper.randomUser()
+                    const token = helper.getToken(user.id, user.username)
+                    const response = await api.post('/api/blogs').
+                        set('Authorization', `Bearer ${token}`).
+                        send(testData.newBlog)
+                    await api.delete(`/api/blogs/${response.body._id}`).
+                        set('Authorization', `Bearer ${token}`).
+                        expect(200)
+                    const blogs = await helper.blogsInDb()
+                    expect(blogs.map(b => b.id.toString())).
+                        not.
+                        toContain(response.body._id.toString())
+                })
 
-        test('a non-existing blog it responds with 404', async () => {
-            const user = await helper.randomUser()
-            const token = helper.getToken(user.id, user.username)
-            const validNonExistingId = await helper.nonExistingId()
-            await api.delete(`/api/blogs/${validNonExistingId}`).
-                set('Authorization', `Bearer ${token}`).
-                expect(404)
+            test('not belonging to user with valid token should not be deleted',
+                async () => {
+                    const user = await helper.randomUser()
+                    let anotherUser = await helper.randomUser()
+                    while (anotherUser.username === user.username) {
+                        anotherUser = await helper.randomUser()
+                    }
+                    const token = helper.getToken(user.id, user.username)
+                    const anotherToken = helper.getToken(anotherUser.id,
+                        anotherUser.username)
+                    const response = await api.post('/api/blogs').
+                        set('Authorization', `Bearer ${anotherToken}`).
+                        send(testData.newBlog)
+                    await api.delete(`/api/blogs/${response.body._id}`).
+                        set('Authorization', `Bearer ${token}`).
+                        expect(401)
+                })
+        })
+        describe('non-existing blog', () => {
+            test('it should respond with 404', async () => {
+                const user = await helper.randomUser()
+                const token = helper.getToken(user.id, user.username)
+                const validNonExistingId = await helper.nonExistingId()
+                await api.delete(`/api/blogs/${validNonExistingId}`).
+                    set('Authorization', `Bearer ${token}`).
+                    expect(404)
+            })
         })
     })
 })

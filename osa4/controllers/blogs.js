@@ -58,9 +58,14 @@ blogsRouter.delete('/:id', async (request, response) => {
             return response.status(401).
                 json({error: 'token missing or invalid'})
         }
-        const res = await Blog.findByIdAndRemove(request.params.id)
-        if (res) {
-            response.status(200).end()
+        const blog = await Blog.findById(request.params.id)
+        if (blog) {
+            if (blog.user.toString() === decodedToken.id.toString()) {
+                await Blog.findByIdAndRemove(request.params.id)
+                response.status(200).end()
+            } else {
+                response.status(401).end()
+            }
         } else {
             response.status(404).end()
         }
@@ -71,7 +76,7 @@ blogsRouter.delete('/:id', async (request, response) => {
             console.log(exception)
             response.status(500).json({
                 error: 'Something went horribly wrong!',
-                exception: exception,
+                exception: exception.message,
             })
         }
     }
