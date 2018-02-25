@@ -54,6 +54,13 @@ class App extends React.Component {
         this.updateBlog(blog)
     }
 
+    handleDelete = (blog) => async () => {
+        await blogService.destroy(blog)
+        window.confirm(`Really delete ${blog.title} by ${blog.author}?`) ?
+            this.deleteBlog(blog) :
+            null
+    }
+
     flashMessage = (message) => {
         this.setState({message})
         setTimeout(() => {
@@ -72,6 +79,11 @@ class App extends React.Component {
         let blogsWithoutOne = this.state.blogs.filter(b => b.id !== blog.id)
         let updatedBlogs = blogsWithoutOne.concat(blog)
         this.setState({blogs: updatedBlogs})
+    }
+
+    deleteBlog = (blog) => {
+        let blogsWithoutOne = this.state.blogs.filter(b => b.id !== blog.id)
+        this.setState({blogs: blogsWithoutOne})
     }
 
     componentDidMount () {
@@ -113,7 +125,8 @@ class App extends React.Component {
                 <div>
                     {this.state.blogs.sort((a, b) => b.likes - a.likes).map(
                         blog => <Blog key={blog.id} blog={blog}
-                                      likeHandler={this.handleLike}/>,)}
+                                      likeHandler={this.handleLike}
+                                      deleteHandler={this.handleDelete}/>,)}
                 </div>
                 <Toggleable buttonLabel="Create blog"
                             ref={component => this.blogForm = component}>

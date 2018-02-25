@@ -1,7 +1,7 @@
 import React from 'react'
 import Toggleable from './Toggleable'
 
-const Blog = ({blog, likeHandler}) => (
+const Blog = ({blog, likeHandler, deleteHandler}) => (
     <Toggleable buttonLabel={`${blog.title} ${blog.author}`}>
         <div>
             <p>{blog.title}</p>
@@ -10,6 +10,7 @@ const Blog = ({blog, likeHandler}) => (
             <p>{blog.likes} likes
                 <button onClick={likeHandler(blog)}>Like</button>
             </p>
+            <button onClick={deleteHandler(blog)}>Delete</button>
         </div>
     </Toggleable>
 )
