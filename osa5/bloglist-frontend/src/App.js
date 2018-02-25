@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import Login from './components/Login'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
 
 class App extends React.Component {
     constructor (props) {
@@ -15,6 +16,7 @@ class App extends React.Component {
                 username: '',
                 password: '',
             },
+            message: null,
         }
     }
 
@@ -24,19 +26,19 @@ class App extends React.Component {
             const user = await loginService.login(this.state.credentials)
             window.localStorage.setItem('loggedUser', JSON.stringify(user))
             this.setState({credentials: {username: '', password: ''}, user})
+            this.flashMessage({text: 'Login successful!', type: 'success'})
         } catch (exception) {
-            this.setState({
-                error: 'käyttäjätunnus tai salasana virheellinen',
+            this.flashMessage({
+                text: 'Incorrect username or password!',
+                type: 'error',
             })
-            setTimeout(() => {
-                this.setState({error: null})
-            }, 5000)
         }
     }
 
     handleLogout = () => {
         window.localStorage.removeItem('loggedUser')
         this.setState({user: null})
+        this.flashMessage({text: 'Successfully logged out.', type: 'success'})
     }
 
     handleCredentialChange = (event) => {
@@ -45,9 +47,23 @@ class App extends React.Component {
         this.setState({credentials: newCredentials})
     }
 
+    flashMessage = (message) => {
+        this.setState({message})
+        setTimeout(() => {
+            this.setState({message: null})
+        }, 5000)
+    }
+
+    addBlog = (blog) => {
+        let blogs = this.state.blogs
+        blogs = blogs.concat(blog)
+        console.log(blog)
+        this.setState({blogs})
+    }
+
     componentDidMount () {
         blogService.getAll().then(blogs =>
-            this.setState({blogs}),
+            this.setState({blogs})
         )
 
         const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -62,6 +78,7 @@ class App extends React.Component {
         if (this.state.user === null) {
             return (
                 <div>
+                    <Notification message={this.state.message}/>
                     <h1>Log in to application</h1>
                     <Login key={'login'} handleLogin={this.handleLogin}
                            handleCredentialChange={this.handleCredentialChange}
@@ -71,6 +88,7 @@ class App extends React.Component {
         }
         return (
             <div>
+                <Notification message={this.state.message}/>
                 <h2>blogs</h2>
                 <p>
                     {this.state.user.name} logged in
@@ -83,7 +101,8 @@ class App extends React.Component {
                     {this.state.blogs.map(
                         blog => <Blog key={blog.id} blog={blog}/>,)}
                 </div>
-                <BlogForm/>
+                <BlogForm flashMessage={this.flashMessage}
+                          addBlog={this.addBlog}/>
             </div>
         )
     }

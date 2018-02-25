@@ -15,12 +15,27 @@ class NewBlog extends React.Component {
         this.setState({[event.target.title]: event.target.value})
     }
 
-    handleCreate = async () => {
-        await blogService.create({
-            author: this.state.author,
-            title: this.state.title,
-            url: this.state.url,
-        })
+    handleCreate = async (event) => {
+        event.preventDefault()
+        try {
+            const blog = await blogService.create({
+                author: this.state.author,
+                title: this.state.title,
+                url: this.state.url,
+            })
+            if (blog) {
+                this.props.addBlog(blog)
+                this.props.flashMessage(
+                    {text: 'Succesfully created blog entry!', type: 'success'})
+            } else {
+                this.props.flashMessage(
+                    {text: 'Error creating blog entry!', type: 'error'})
+            }
+        } catch (exception) {
+            this.props.flashMessage(
+                {text: 'Something went wrong!', type: 'error'})
+        }
+
     }
 
     render () {
