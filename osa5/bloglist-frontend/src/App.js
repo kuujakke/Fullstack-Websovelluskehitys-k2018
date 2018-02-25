@@ -56,9 +56,9 @@ class App extends React.Component {
 
     handleDelete = (blog) => async () => {
         await blogService.destroy(blog)
-        window.confirm(`Really delete ${blog.title} by ${blog.author}?`) ?
-            this.deleteBlog(blog) :
-            null
+        window.confirm(`Really delete ${blog.title} by ${blog.author}?`)
+            ? this.deleteBlog(blog)
+            : null
     }
 
     flashMessage = (message) => {
@@ -70,6 +70,7 @@ class App extends React.Component {
 
     addBlog = (blog) => {
         let blogs = this.state.blogs
+        blog.user = this.state.user
         blogs = blogs.concat(blog)
         this.setState({blogs})
         this.blogForm.toggleVisibility()
@@ -126,7 +127,8 @@ class App extends React.Component {
                     {this.state.blogs.sort((a, b) => b.likes - a.likes).map(
                         blog => <Blog key={blog.id} blog={blog}
                                       likeHandler={this.handleLike}
-                                      deleteHandler={this.handleDelete}/>,)}
+                                      deleteHandler={this.handleDelete}
+                                      user={this.state.user}/>,)}
                 </div>
                 <Toggleable buttonLabel="Create blog"
                             ref={component => this.blogForm = component}>

@@ -23,6 +23,7 @@ class NewBlog extends React.Component {
                 title: this.state.title,
                 url: this.state.url,
             })
+            console.log(blog)
             if (blog) {
                 this.props.addBlog(blog)
                 this.props.flashMessage(
