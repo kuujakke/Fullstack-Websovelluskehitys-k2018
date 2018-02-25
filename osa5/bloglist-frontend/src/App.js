@@ -111,7 +111,7 @@ class App extends React.Component {
                     </button>
                 </p>
                 <div>
-                    {this.state.blogs.map(
+                    {this.state.blogs.sort((a, b) => b.likes - a.likes).map(
                         blog => <Blog key={blog.id} blog={blog}
                                       likeHandler={this.handleLike}/>,)}
                 </div>
