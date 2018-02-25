@@ -21,7 +21,7 @@ class App extends React.Component {
         event.preventDefault()
         try {
             const user = await loginService.login(this.state.credentials)
-
+            window.localStorage.setItem('loggedUser', JSON.stringify(user))
             this.setState({credentials: {username: '', password: ''}, user})
         } catch (exception) {
             this.setState({
@@ -31,6 +31,11 @@ class App extends React.Component {
                 this.setState({error: null})
             }, 5000)
         }
+    }
+
+    handleLogout = () => {
+        window.localStorage.removeItem('loggedUser')
+        this.setState({user: null})
     }
 
     handleCredentialChange = (event) => {
@@ -43,6 +48,12 @@ class App extends React.Component {
         blogService.getAll().then(blogs =>
             this.setState({blogs}),
         )
+
+        const loggedUserJSON = window.localStorage.getItem('loggedUser')
+        if (loggedUserJSON) {
+            const user = JSON.parse(loggedUserJSON)
+            this.setState({user})
+        }
     }
 
     render () {
@@ -59,7 +70,13 @@ class App extends React.Component {
         return (
             <div>
                 <h2>blogs</h2>
-                <p>{this.state.user.name} logged in</p>
+                <p>
+                    {this.state.user.name} logged in
+                    <button type="submit"
+                            onClick={this.handleLogout}>
+                        logout
+                    </button>
+                </p>
                 {this.state.blogs.map(
                     blog => <Blog key={blog.id} blog={blog}/>,)}
             </div>
