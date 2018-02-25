@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import Login from './components/Login'
 import loginService from './services/login'
+import BlogForm from './components/BlogForm'
 
 class App extends React.Component {
     constructor (props) {
@@ -53,6 +54,7 @@ class App extends React.Component {
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
             this.setState({user})
+            blogService.setToken(user.token)
         }
     }
 
@@ -77,8 +79,11 @@ class App extends React.Component {
                         logout
                     </button>
                 </p>
-                {this.state.blogs.map(
-                    blog => <Blog key={blog.id} blog={blog}/>,)}
+                <div>
+                    {this.state.blogs.map(
+                        blog => <Blog key={blog.id} blog={blog}/>,)}
+                </div>
+                <BlogForm/>
             </div>
         )
     }
