@@ -1,4 +1,4 @@
-h1, h2, p, label, td, button, input, text {
+h1, h2, p, label, td, button, input, text, .toggleable {
     color: #49274A;
     font-family: "Lato Hairline", sans-serif;
     border-radius: 9px;
@@ -36,6 +36,16 @@ input {
     margin: 5px;
     text-align: center;
 }
+
+.toggled {
+    border-radius: 10px;
+    border-color: #49274a;
+    padding: 5px;
+    margin: 5px;
+    border-width: medium;
+    border-style: solid;
+}
+
 
 body {
     background-color: #f4f0e9;

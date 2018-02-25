@@ -1,10 +1,10 @@
 import React from 'react'
 
 class Toggleable extends React.Component {
-    constructor(props) {
+    constructor (props) {
         super(props)
         this.state = {
-            visible: false
+            visible: false,
         }
     }
 
@@ -12,18 +12,19 @@ class Toggleable extends React.Component {
         this.setState({visible: !this.state.visible})
     }
 
-    render() {
-        const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
-        const showWhenVisible = { display: this.state.visible ? '' : 'none' }
+    render () {
+        const hideWhenVisible = {display: this.state.visible ? 'none' : ''}
+        const showWhenVisible = {display: this.state.visible ? '' : 'none'}
 
         return (
             <div>
                 <div style={hideWhenVisible}>
-                    <button onClick={this.toggleVisibility}>{this.props.buttonLabel}</button>
+                    <div onClick={this.toggleVisibility}
+                         className={'toggleable'}>{this.props.buttonLabel}</div>
                 </div>
-                <div style={showWhenVisible}>
+                <div style={showWhenVisible} className={'toggled'}>
                     {this.props.children}
-                    <button onClick={this.toggleVisibility}>cancel</button>
+                    <button onClick={this.toggleVisibility}>Close</button>
                 </div>
             </div>
         )
