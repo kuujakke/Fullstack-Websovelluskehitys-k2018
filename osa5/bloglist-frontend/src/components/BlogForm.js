@@ -31,6 +31,7 @@ class NewBlog extends React.Component {
                 this.props.flashMessage(
                     {text: 'Error creating blog entry!', type: 'error'})
             }
+            this.setState({author: '', title: '', url: ''})
         } catch (exception) {
             this.props.flashMessage(
                 {text: 'Something went wrong!', type: 'error'})

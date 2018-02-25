@@ -5,6 +5,7 @@ import Login from './components/Login'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Toggleable from './components/Toggleable'
 
 class App extends React.Component {
     constructor (props) {
@@ -59,11 +60,12 @@ class App extends React.Component {
         blogs = blogs.concat(blog)
         console.log(blog)
         this.setState({blogs})
+        this.blogForm.toggleVisibility()
     }
 
     componentDidMount () {
         blogService.getAll().then(blogs =>
-            this.setState({blogs})
+            this.setState({blogs}),
         )
 
         const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -101,8 +103,11 @@ class App extends React.Component {
                     {this.state.blogs.map(
                         blog => <Blog key={blog.id} blog={blog}/>,)}
                 </div>
-                <BlogForm flashMessage={this.flashMessage}
-                          addBlog={this.addBlog}/>
+                <Toggleable buttonLabel="Create blog"
+                            ref={component => this.blogForm = component}>
+                    <BlogForm flashMessage={this.flashMessage}
+                              addBlog={this.addBlog}/>
+                </Toggleable>
             </div>
         )
     }
