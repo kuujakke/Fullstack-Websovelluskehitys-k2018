@@ -48,6 +48,12 @@ class App extends React.Component {
         this.setState({credentials: newCredentials})
     }
 
+    handleLike = (blog) => async () => {
+        blog.likes++
+        await blogService.update(blog)
+        this.updateBlog(blog)
+    }
+
     flashMessage = (message) => {
         this.setState({message})
         setTimeout(() => {
@@ -58,9 +64,14 @@ class App extends React.Component {
     addBlog = (blog) => {
         let blogs = this.state.blogs
         blogs = blogs.concat(blog)
-        console.log(blog)
         this.setState({blogs})
         this.blogForm.toggleVisibility()
+    }
+
+    updateBlog = (blog) => {
+        let blogsWithoutOne = this.state.blogs.filter(b => b.id !== blog.id)
+        let updatedBlogs = blogsWithoutOne.concat(blog)
+        this.setState({blogs: updatedBlogs})
     }
 
     componentDidMount () {
@@ -101,7 +112,8 @@ class App extends React.Component {
                 </p>
                 <div>
                     {this.state.blogs.map(
-                        blog => <Blog key={blog.id} blog={blog}/>,)}
+                        blog => <Blog key={blog.id} blog={blog}
+                                      likeHandler={this.handleLike}/>,)}
                 </div>
                 <Toggleable buttonLabel="Create blog"
                             ref={component => this.blogForm = component}>
