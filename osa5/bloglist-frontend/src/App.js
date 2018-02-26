@@ -123,7 +123,7 @@ class App extends React.Component {
                         logout
                     </button>
                 </p>
-                <div>
+                <div className={'blog-list'}>
                     {this.state.blogs.sort((a, b) => b.likes - a.likes).map(
                         blog => <Blog key={blog.id} blog={blog}
                                       likeHandler={this.handleLike}
