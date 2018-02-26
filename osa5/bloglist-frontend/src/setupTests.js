@@ -3,7 +3,7 @@ import Adapter from 'enzyme-adapter-react-16'
 
 jest.mock('./services/blogs')
 
-configure({ adapter: new Adapter() })
+configure({adapter: new Adapter()})
 
 let savedItems = {}
 
@@ -12,7 +12,7 @@ const localStorageMock = {
         savedItems[key] = item
     },
     getItem: (key) => savedItems[key],
-    clear: savedItems = {}
+    clear: savedItems = {},
 }
 
 window.localStorage = localStorageMock
