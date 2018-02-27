@@ -32,6 +32,8 @@ const reducer = (state = initialState, action) => {
                     sort((a, b) => b.votes - a.votes)
             }
             return state
+        case 'ADD':
+            return state.concat(asObject(action.content))
         default:
             return state
     }

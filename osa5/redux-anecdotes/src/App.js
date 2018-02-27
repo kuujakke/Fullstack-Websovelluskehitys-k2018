@@ -1,6 +1,11 @@
 import React from 'react'
 
 class App extends React.Component {
+    handleSubmit = (event) => {
+        event.preventDefault()
+        this.props.store.dispatch(
+            {type: 'ADD', content: this._content.value})
+    }
     render () {
         const anecdotes = this.props.store.getState()
         return (
@@ -21,9 +26,12 @@ class App extends React.Component {
                     </div>,
                 )}
                 <h2>create new</h2>
-                <form>
-                    <div><input/></div>
-                    <button>create</button>
+                <form onSubmit={this.handleSubmit}>
+                    <div>
+                        <input type={'text'}
+                               ref={input => this._content = input}/>
+                    </div>
+                    <button type={'submit'}>create</button>
                 </form>
             </div>
         )
