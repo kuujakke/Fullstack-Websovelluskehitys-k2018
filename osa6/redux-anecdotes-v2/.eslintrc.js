@@ -8,12 +8,15 @@ module.exports = {
         'eslint:recommended',
         'plugin:react/recommended',
     ],
+    'parser': 'babel-eslint',
     'parserOptions': {
+        'ecmaVersion': 6,
+        'sourceType': 'module',
         'ecmaFeatures': {
+            'modules': true,
             'experimentalObjectRestSpread': true,
             'jsx': true,
         },
-        'sourceType': 'module',
     },
     'plugins': [
         'react',
@@ -41,5 +44,12 @@ module.exports = {
         'jest/no-identical-title': 'error',
         'jest/prefer-to-have-length': 'warn',
         'jest/valid-expect': 'error',
+        'react/prop-types': 0,
+    },
+    'settings': {
+        'react': {
+            'pragma': 'React',
+            'version': '16.2.0',
+        },
     },
 }
