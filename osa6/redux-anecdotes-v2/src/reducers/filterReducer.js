@@ -5,7 +5,7 @@ const filterReducer = (filter = '', action) => {
     return filter
 }
 
-export const filter = (filter) => {
+export const setFilter = (filter) => {
     return {type: 'FILTER', filter}
 }
 
