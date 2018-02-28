@@ -1,7 +1,17 @@
 import React from 'react'
 import { anecdoteVote } from '../reducers/anecdoteReducer'
+import { setMessage, resetMessage } from '../reducers/notificationReducer'
 
 class AnecdoteList extends React.Component {
+
+    voteHandler = (anecdote) => () => {
+        this.props.store.dispatch(anecdoteVote(anecdote.id))
+        this.props.store.dispatch(setMessage(`You voted for '${anecdote.content}'`))
+        setTimeout(() => {
+            this.props.store.dispatch(resetMessage())
+        }, 5000)
+    }
+
     render () {
         const anecdotes = this.props.store.getState().anecdotes
         return (
@@ -14,10 +24,7 @@ class AnecdoteList extends React.Component {
                         </div>
                         <div>
                             has {anecdote.votes}
-                            <button onClick={() =>
-                                this.props.store.dispatch(
-                                    anecdoteVote(anecdote.id))
-                            }>
+                            <button onClick={this.voteHandler(anecdote)}>
                                 vote
                             </button>
                         </div>

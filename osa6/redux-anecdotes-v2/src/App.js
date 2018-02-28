@@ -2,6 +2,7 @@ import React from 'react'
 import Notification from './components/Notification'
 import AnecdoteForm from './components/AnecdoteForm'
 import AnecdoteList from './components/AnecdoteList'
+import { resetMessage } from './reducers/notificationReducer'
 
 class App extends React.Component {
 
@@ -15,6 +16,12 @@ class App extends React.Component {
                 <AnecdoteForm store={this.props.store}/>
             </div>
         )
+    }
+
+    componentDidMount () {
+        setTimeout(() => {
+            this.props.store.dispatch(resetMessage(null))
+        }, 5000)
     }
 }
 
