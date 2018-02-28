@@ -6,7 +6,8 @@ class AnecdoteList extends React.Component {
 
     voteHandler = (anecdote) => () => {
         this.props.store.dispatch(anecdoteVote(anecdote.id))
-        this.props.store.dispatch(setMessage(`You voted for '${anecdote.content}'`))
+        this.props.store.dispatch(
+            setMessage(`You voted for '${anecdote.content}'`))
         setTimeout(() => {
             this.props.store.dispatch(resetMessage())
         }, 5000)
@@ -17,19 +18,23 @@ class AnecdoteList extends React.Component {
         return (
             <div>
                 <h2>Anecdotes</h2>
-                {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>
-                    <div key={anecdote.id}>
-                        <div>
-                            {anecdote.content}
-                        </div>
-                        <div>
-                            has {anecdote.votes}
-                            <button onClick={this.voteHandler(anecdote)}>
-                                vote
-                            </button>
-                        </div>
-                    </div>,
-                )}
+                {anecdotes.
+                    filter(a => a.content.includes(
+                        this.props.store.getState().filter)).
+                    sort((a, b) => b.votes - a.votes).
+                    map(anecdote =>
+                        <div key={anecdote.id}>
+                            <div>
+                                {anecdote.content}
+                            </div>
+                            <div>
+                                has {anecdote.votes}
+                                <button onClick={this.voteHandler(anecdote)}>
+                                    vote
+                                </button>
+                            </div>
+                        </div>,
+                    )}
             </div>
         )
     }
