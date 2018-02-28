@@ -17,12 +17,6 @@ class App extends React.Component {
             </div>
         )
     }
-
-    componentDidMount () {
-        setTimeout(() => {
-           // this.props.store.dispatch(resetMessage(null))
-        }, 5000)
-    }
 }
 
 export default App
