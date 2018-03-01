@@ -19,4 +19,13 @@ export const resetMessage = () => {
     return {type: 'SET', message: null}
 }
 
+export const notifyWith = (message, duration) => {
+    return (dispatch) => {
+        dispatch(setMessage(message))
+        setTimeout(() => {
+            dispatch(resetMessage())
+        }, duration * 1000)
+    }
+}
+
 export default notificationReducer
