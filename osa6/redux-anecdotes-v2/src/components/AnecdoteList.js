@@ -2,46 +2,44 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { anecdoteVote } from '../reducers/anecdoteReducer'
 import { setMessage, resetMessage } from '../reducers/notificationReducer'
+import Filter from './Filter'
 
-class AnecdoteList extends React.Component {
+const AnecdoteList = (props) => {
 
-    voteHandler = (anecdote) => () => {
-        this.props.anecdoteVote(anecdote.id)
-        this.props.setMessage(`You voted for '${anecdote.content}'`)
+    const voteHandler = (anecdote) => () => {
+        props.anecdoteVote(anecdote.id)
+        props.setMessage(`You voted for '${anecdote.content}'`)
         setTimeout(() => {
-            this.props.resetMessage()
+            props.resetMessage()
         }, 5000)
     }
 
-    render () {
-        return (
-            <div>
-                <h2>Anecdotes</h2>
-                {this.props.anecdotes
-                    .filter(a => a.content.includes(this.props.filter))
-                    .sort((a, b) => b.votes - a.votes)
-                    .map(anecdote =>
-                        <div key={anecdote.id}>
-                            <div>
-                                {anecdote.content}
-                            </div>
-                            <div>
-                                has {anecdote.votes}
-                                <button onClick={this.voteHandler(anecdote)}>
-                                    vote
-                                </button>
-                            </div>
-                        </div>,
-                    )}
-            </div>
-        )
-    }
+    return (
+        <div>
+            <h2>Anecdotes</h2>
+            <Filter/>
+            {props.anecdotes.map(anecdote =>
+                <div key={anecdote.id}>
+                    <div>
+                        {anecdote.content}
+                    </div>
+                    <div>
+                        has {anecdote.votes}
+                        <button onClick={voteHandler(anecdote)}>
+                            vote
+                        </button>
+                    </div>
+                </div>,
+            )}
+        </div>
+    )
 }
 
 const mapStateToProps = (state) => {
     return {
-        anecdotes: state.anecdotes,
-        filter: state.filter,
+        anecdotes: state.anecdotes
+        .filter(a => a.content.includes(state.filter))
+        .sort((a, b) => b.votes - a.votes),
     }
 }
 
