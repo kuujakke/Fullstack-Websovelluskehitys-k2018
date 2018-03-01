@@ -3,14 +3,12 @@ import { connect } from 'react-redux'
 import { anecdoteVote } from '../reducers/anecdoteReducer'
 import { setMessage, resetMessage } from '../reducers/notificationReducer'
 import Filter from './Filter'
-import anecdoteService from '../services/anecdotes'
 
 const AnecdoteList = (props) => {
 
     const voteHandler = (anecdote) => async () => {
         props.anecdoteVote(anecdote.id)
         props.setMessage(`You voted for '${anecdote.content}'`)
-        await anecdoteService.putAnecdote({...anecdote, votes: anecdote.votes + 1})
         setTimeout(() => {
             props.resetMessage()
         }, 5000)

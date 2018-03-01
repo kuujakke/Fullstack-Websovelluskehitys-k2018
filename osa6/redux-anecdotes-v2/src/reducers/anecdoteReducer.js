@@ -8,13 +8,7 @@ const anecdoteReducer = (store = [], action) => {
 
             return [...old, {...voted, votes: voted.votes + 1}]
         case 'CREATE':
-            return [
-                ...store,
-                {
-                    content: action.content,
-                    votes: 0,
-                    id: action.id,
-                }]
+            return [...store, {content: action.content, votes: 0,}]
         case 'INIT':
             return action.data
         default:
@@ -22,12 +16,21 @@ const anecdoteReducer = (store = [], action) => {
     }
 }
 
-export const anecdoteCreate = (anecdote) => {
-    return {type: 'CREATE', ...anecdote}
+export const anecdoteCreate = (content) => {
+    return async (dispatch) => {
+        const newAnecdote = await anecdoteService.createNew(content)
+        dispatch({type: 'CREATE', ...newAnecdote})
+    }
 }
 
 export const anecdoteVote = (id) => {
-    return {type: 'VOTE', id}
+    return async (dispatch) => {
+        const anecdotes = await anecdoteService.getAll()
+        const anecdote = anecdotes.find(a => a.id === id)
+        await anecdoteService.putAnecdote(
+            {...anecdote, votes: anecdote.votes + 1})
+        dispatch({type: 'VOTE', id: anecdote.id})
+    }
 }
 
 export const anecdoteInitialize = () => {
