@@ -1,13 +1,26 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom'
 
-const Menu = () => (
-    <div>
-        <Link to="/">anecdotes</Link>&nbsp;
-        <Link to="/create">create new</Link>&nbsp;
-        <Link to="/about">about</Link>&nbsp;
-    </div>
-)
+const Menu = () => {
+    const activeStyle = {
+        color: 'red'
+    }
+    const style = {
+        color: 'blue',
+        border: 'solid',
+        fontSize: 20,
+        borderRadius: 10,
+        padding: 10,
+        textDecoration: 'none'
+    }
+    return (
+        <div>
+            <NavLink exact to="/" activeStyle={activeStyle} style={style}>anecdotes</NavLink>&nbsp;
+            <NavLink to="/create" activeStyle={activeStyle} style={style}>create new</NavLink>&nbsp;
+            <NavLink to="/about" activeStyle={activeStyle} style={style}>about</NavLink>&nbsp;
+        </div>
+    )
+}
 
 const AnecdoteList = ({anecdotes}) => (
     <div>
@@ -71,7 +84,7 @@ const Notification = ({message}) => {
         borderWidth: 'medium',
         borderRadius: 20,
         textAlign: 'center',
-        fontSize: 20
+        fontSize: 20,
     }
     if (message) {
         return (
@@ -166,7 +179,8 @@ class App extends React.Component {
     addNew = (anecdote) => {
         anecdote.id = (Math.random() * 10000).toFixed(0)
         this.setState({anecdotes: this.state.anecdotes.concat(anecdote)})
-        this.flashNotification(`a new anecdote ${anecdote.content} created!`, 10)
+        this.flashNotification(`a new anecdote ${anecdote.content} created!`,
+            10)
     }
 
     anecdoteById = (id) =>
