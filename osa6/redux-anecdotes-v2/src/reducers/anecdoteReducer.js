@@ -6,7 +6,13 @@ const anecdoteReducer = (store = [], action) => {
 
             return [...old, {...voted, votes: voted.votes + 1}]
         case 'CREATE':
-            return [...store, {content: action.content, id: getId(), votes: 0}]
+            return [
+                ...store,
+                {
+                    content: action.content,
+                    votes: 0,
+                    id: action.id,
+                }]
         case 'INIT':
             return action.data
         default:
@@ -14,8 +20,8 @@ const anecdoteReducer = (store = [], action) => {
     }
 }
 
-export const anecdoteCreate = (content) => {
-    return {type: 'CREATE', content}
+export const anecdoteCreate = (anecdote) => {
+    return {type: 'CREATE', ...anecdote}
 }
 
 export const anecdoteVote = (id) => {
