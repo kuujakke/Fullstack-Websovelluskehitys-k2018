@@ -65,10 +65,17 @@ const Footer = () => (
 )
 
 const Notification = ({message}) => {
-    console.log(message)
+    const notificationStyle = {
+        color: 'green',
+        borderStyle: 'solid',
+        borderWidth: 'medium',
+        borderRadius: 20,
+        textAlign: 'center',
+        fontSize: 20
+    }
     if (message) {
         return (
-            <div>
+            <div style={notificationStyle}>
                 <p>{message}</p>
             </div>
         )
