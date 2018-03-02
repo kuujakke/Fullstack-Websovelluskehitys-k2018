@@ -1,6 +1,9 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom'
-import { Container, Table, Grid, Image, Header } from 'semantic-ui-react'
+import {
+    Container, Table, Grid, Image, Header, Form,
+    Button, Message, Segment,
+} from 'semantic-ui-react'
 
 const Menu = () => {
     const activeStyle = {
@@ -47,11 +50,18 @@ const AnecdoteList = ({anecdotes}) => (
 )
 
 const Anecdote = ({anecdote}) => (
-    <div>
-        <h2>{anecdote.content} by {anecdote.author}</h2>
-        <p>Has {anecdote.votes} votes</p>
-        <p>For more info see <a href={anecdote.info}>{anecdote.info}</a></p>
-    </div>
+    <Grid.Column width={12}>
+        <Grid.Row>
+            <Header as={'h2'}>{anecdote.content} by {anecdote.author}</Header>
+        </Grid.Row>
+        <Grid.Row>
+            <Segment>Has {anecdote.votes} votes</Segment>
+        </Grid.Row>
+        <Grid.Row>
+            <Segment>For more info see <a
+                href={anecdote.info}>{anecdote.info}</a></Segment>
+        </Grid.Row>
+    </Grid.Column>
 )
 
 const About = () => (
@@ -98,19 +108,11 @@ const Footer = () => (
 )
 
 const Notification = ({message}) => {
-    const notificationStyle = {
-        color: 'green',
-        borderStyle: 'solid',
-        borderWidth: 'medium',
-        borderRadius: 20,
-        textAlign: 'center',
-        fontSize: 20,
-    }
     if (message) {
         return (
-            <div style={notificationStyle}>
-                <p>{message}</p>
-            </div>
+            <Message>
+                <Message.Content>{message}</Message.Content>
+            </Message>
         )
     }
     return null
@@ -145,27 +147,28 @@ class CreateNew extends React.Component {
 
     render () {
         return (
-            <div>
-                <h2>create a new anecdote</h2>
-                <form onSubmit={this.handleSubmit}>
-                    <div>
-                        content
-                        <input name='content' value={this.state.content}
-                               onChange={this.handleChange}/>
-                    </div>
-                    <div>
-                        author
-                        <input name='author' value={this.state.author}
-                               onChange={this.handleChange}/>
-                    </div>
-                    <div>
-                        url for more info
-                        <input name='info' value={this.state.info}
-                               onChange={this.handleChange}/>
-                    </div>
-                    <button>create</button>
-                </form>
-            </div>
+            <Grid.Column>
+                <Grid.Row>
+                    <Form onSubmit={this.handleSubmit}>
+                        <Form.Field>
+                            <label>content</label>
+                            <input name='content' value={this.state.content}
+                                   onChange={this.handleChange}/>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>author</label>
+                            <input name='author' value={this.state.author}
+                                   onChange={this.handleChange}/>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>url for more info</label>
+                            <input name='info' value={this.state.info}
+                                   onChange={this.handleChange}/>
+                        </Form.Field>
+                        <Button>create</Button>
+                    </Form>
+                </Grid.Row>
+            </Grid.Column>
         )
 
     }
