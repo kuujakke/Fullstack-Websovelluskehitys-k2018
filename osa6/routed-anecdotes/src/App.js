@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom'
-import { Container, Table } from 'semantic-ui-react'
+import { Container, Table, Grid, Image, Header } from 'semantic-ui-react'
 
 const Menu = () => {
     const activeStyle = {
@@ -16,20 +16,20 @@ const Menu = () => {
 
     }
     return (
-        <div>
+        <Grid.Row>
             <NavLink exact to="/" activeStyle={activeStyle}
                      style={style}>anecdotes</NavLink>&nbsp;
             <NavLink to="/create" activeStyle={activeStyle} style={style}>create
                 new</NavLink>&nbsp;
             <NavLink to="/about" activeStyle={activeStyle}
                      style={style}>about</NavLink>&nbsp;
-        </div>
+        </Grid.Row>
     )
 }
 
 const AnecdoteList = ({anecdotes}) => (
-    <div>
-        <h2>Anecdotes</h2>
+    <Grid.Row>
+        <Header>Anecdotes</Header>
         <Table>
             <Table.Body>
                 {anecdotes.map(
@@ -43,7 +43,7 @@ const AnecdoteList = ({anecdotes}) => (
                 )}
             </Table.Body>
         </Table>
-    </div>
+    </Grid.Row>
 )
 
 const Anecdote = ({anecdote}) => (
@@ -55,27 +55,38 @@ const Anecdote = ({anecdote}) => (
 )
 
 const About = () => (
-    <div>
-        <h2>About anecdote app</h2>
-        <p>According to Wikipedia:</p>
+    <Grid.Row centered={true}>
+        <Grid.Column>
+            <Header>About anecdote app</Header>
+            <p>According to Wikipedia:</p>
 
-        <em>An anecdote is a brief, revealing account of an individual person or
-            an incident.
-            Occasionally humorous, anecdotes differ from jokes because their
-            primary purpose is not simply to provoke laughter but to reveal a
-            truth more general than the brief tale itself,
-            such as to characterize a person by delineating a specific quirk or
-            trait, to communicate an abstract idea about a person, place, or
-            thing through the concrete details of a short narrative.
-            An anecdote is "a story with a point."</em>
+            <em>An anecdote is a brief, revealing account of an individual
+                person or
+                an incident.
+                Occasionally humorous, anecdotes differ from jokes because their
+                primary purpose is not simply to provoke laughter but to reveal
+                a
+                truth more general than the brief tale itself,
+                such as to characterize a person by delineating a specific quirk
+                or
+                trait, to communicate an abstract idea about a person, place, or
+                thing through the concrete details of a short narrative.
+                An anecdote is "a story with a point."</em>
 
-        <p>Software engineering is full of excellent anecdotes, at this app you
-            can find the best and add more.</p>
-    </div>
+            <p>Software engineering is full of excellent anecdotes, at this app
+                you
+                can find the best and add more.</p>
+        </Grid.Column>
+        <Grid.Column>
+            <Image
+                src={'https://upload.wikimedia.org/wikipedia/commons/a/a1/Alan_Turing_Aged_16.jpg'}
+                size={'medium'}/>
+        </Grid.Column>
+    </Grid.Row>
 )
 
 const Footer = () => (
-    <div>
+    <Grid.Row>
         Anecdote app for <a
         href='https://courses.helsinki.fi/fi/TKT21009/121540749'>Full Stack
         -sovelluskehitys</a>.
@@ -83,7 +94,7 @@ const Footer = () => (
         See <a
         href='https://github.com/mluukkai/routed-anecdotes'>https://github.com/mluukkai/routed-anecdotes</a> for
         the source code.
-    </div>
+    </Grid.Row>
 )
 
 const Notification = ({message}) => {
@@ -219,8 +230,10 @@ class App extends React.Component {
         return (
             <Container>
                 <Router>
-                    <div>
-                        <h1>Software anecdotes</h1>
+                    <Grid columns={3} centered={true}>
+                        <Grid.Row>
+                            <Header size={'huge'}>Software anecdotes</Header>
+                        </Grid.Row>
                         <Menu/>
                         <Notification message={this.state.notification}/>
                         <Route exact path="/" render={() => <AnecdoteList
@@ -233,7 +246,7 @@ class App extends React.Component {
                                    anecdote={this.anecdoteById(
                                        match.params.id)}/>}/>
                         <Footer/>
-                    </div>
+                    </Grid>
                 </Router>
             </Container>
         )
