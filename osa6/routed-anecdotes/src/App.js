@@ -1,9 +1,10 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom'
+import { Container, Table } from 'semantic-ui-react'
 
 const Menu = () => {
     const activeStyle = {
-        color: 'red'
+        color: 'red',
     }
     const style = {
         color: 'blue',
@@ -11,13 +12,17 @@ const Menu = () => {
         fontSize: 20,
         borderRadius: 10,
         padding: 10,
-        textDecoration: 'none'
+        textDecoration: 'none',
+
     }
     return (
         <div>
-            <NavLink exact to="/" activeStyle={activeStyle} style={style}>anecdotes</NavLink>&nbsp;
-            <NavLink to="/create" activeStyle={activeStyle} style={style}>create new</NavLink>&nbsp;
-            <NavLink to="/about" activeStyle={activeStyle} style={style}>about</NavLink>&nbsp;
+            <NavLink exact to="/" activeStyle={activeStyle}
+                     style={style}>anecdotes</NavLink>&nbsp;
+            <NavLink to="/create" activeStyle={activeStyle} style={style}>create
+                new</NavLink>&nbsp;
+            <NavLink to="/about" activeStyle={activeStyle}
+                     style={style}>about</NavLink>&nbsp;
         </div>
     )
 }
@@ -25,15 +30,19 @@ const Menu = () => {
 const AnecdoteList = ({anecdotes}) => (
     <div>
         <h2>Anecdotes</h2>
-        <ul>
-            {anecdotes.map(
-                anecdote =>
-                    <li key={anecdote.id}>
-                        <Link to={`/anecdotes/${anecdote.id}`}>
-                            {anecdote.content}</Link>
-                    </li>,
-            )}
-        </ul>
+        <Table>
+            <Table.Body>
+                {anecdotes.map(
+                    anecdote =>
+                        <Table.Row key={anecdote.id}>
+                            <Table.Cell>
+                                <Link to={`/anecdotes/${anecdote.id}`}>
+                                    {anecdote.content}</Link>
+                            </Table.Cell>
+                        </Table.Row>,
+                )}
+            </Table.Body>
+        </Table>
     </div>
 )
 
@@ -208,7 +217,7 @@ class App extends React.Component {
 
     render () {
         return (
-            <div>
+            <Container>
                 <Router>
                     <div>
                         <h1>Software anecdotes</h1>
@@ -226,7 +235,7 @@ class App extends React.Component {
                         <Footer/>
                     </div>
                 </Router>
-            </div>
+            </Container>
         )
     }
 }
