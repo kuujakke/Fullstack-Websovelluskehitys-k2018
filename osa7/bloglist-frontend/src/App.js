@@ -10,6 +10,7 @@ import Notification from './components/Notification'
 import Toggleable from './components/Toggleable'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import userService from './services/users'
+import Blog from './components/Blog'
 
 class App extends React.Component {
     constructor (props) {
@@ -120,6 +121,7 @@ class App extends React.Component {
                 </div>
             )
         }
+        console.log(this.state.blogs)
         return (
             <Router>
                 <div>
@@ -147,10 +149,18 @@ class App extends React.Component {
                         </div>}/>
                     <Route exact path={'/users'} render={() =>
                         <UserList/>}/>
-                    <Route exact path="/users/:id"
+                    <Route exact path={'/users/:id'}
                            render={({match}) => <UserInfo
                                user={this.state.users.find(
                                    u => u.id === match.params.id)}/>}/>
+                    <Route exact path={'/blogs/:id'}
+                           render={({match}) => <Blog key={match.params.id}
+                                                      blog={this.state.blogs.find(
+                                                          b => b.id ===
+                                                              match.params.id)}
+                                                      likeHandler={this.handleLike}
+                                                      deleteHandler={this.handleDelete}
+                                                      user={this.state.user}/>}/>
                 </div>
             </Router>
         )

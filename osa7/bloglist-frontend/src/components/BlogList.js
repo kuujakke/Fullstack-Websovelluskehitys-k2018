@@ -1,15 +1,24 @@
 import React from 'react'
-import Blog from './Blog'
+import { Link } from 'react-router-dom'
 
 class BlogList extends React.Component {
     render () {
         return (
             <div className={'blog-list'}>
-                {this.props.blogs.sort((a, b) => b.likes - a.likes).map(
-                    blog => <Blog key={blog.id} blog={blog}
-                                  likeHandler={this.props.handleLike}
-                                  deleteHandler={this.props.handleDelete}
-                                  user={this.props.user}/>,)}
+                <table>
+                    <tbody>
+                    {this.props.blogs.sort((a, b) => b.likes - a.likes).map(
+                        blog =>
+                            <tr>
+                                <td>
+                                    <Link to={`/blogs/${blog.id}`}>
+                                        {blog.title} by {blog.author}
+                                    </Link>
+                                </td>
+                            </tr>
+                    )}
+                    </tbody>
+                </table>
             </div>
         )
     }
