@@ -1,0 +1,52 @@
+h1, h2, p, label, td, button, input, text, .toggleable {
+    color: #49274A;
+    font-family: "Lato Hairline", sans-serif;
+    border-radius: 9px;
+    padding: 2px;
+    margin: 2px;
+}
+
+h1 {
+    font-size: 3em;
+    text-align: center;
+}
+
+input {
+    background-color: #f8f7ef;
+}
+
+.error {
+    background-color: firebrick;
+    color: #F8EEE7;
+    font-size: 1.5em;
+    font-family: "Lato", sans-serif;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+}
+
+.success {
+    background-color: forestgreen;
+    color: #F8EEE7;
+    font-size: 1.5em;
+    font-family: "Lato", sans-serif;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+}
+
+.toggled {
+    border-radius: 10px;
+    border-color: #49274a;
+    padding: 5px;
+    margin: 5px;
+    border-width: medium;
+    border-style: solid;
+}
+
+
+body {
+    background-color: #f4f0e9;
+}
