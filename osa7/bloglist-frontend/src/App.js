@@ -11,6 +11,7 @@ import Toggleable from './components/Toggleable'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import userService from './services/users'
 import Blog from './components/Blog'
+import Navigation from './components/Navigation'
 
 class App extends React.Component {
     constructor (props) {
@@ -103,7 +104,6 @@ class App extends React.Component {
         const loggedUserJSON = window.localStorage.getItem('loggedUser')
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
-            console.log(user)
             this.setState({user})
             blogService.setToken(user.token)
         }
@@ -121,19 +121,12 @@ class App extends React.Component {
                 </div>
             )
         }
-        console.log(this.state.blogs)
         return (
             <Router>
                 <div>
+                    <h1>Blogs</h1>
+                    <Navigation name={this.state.user.name} logoutHandler={this.handleLogout}/>
                     <Notification message={this.state.message}/>
-                    <h2>blogs</h2>
-                    <p>
-                        {this.state.user.name} logged in
-                        <button type="submit"
-                                onClick={this.handleLogout}>
-                            logout
-                        </button>
-                    </p>
                     <Route exact path={'/'} render={() =>
                         <div>
                             <BlogList blogs={this.state.blogs}

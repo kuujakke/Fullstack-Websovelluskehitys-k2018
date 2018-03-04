@@ -9,7 +9,7 @@ class BlogList extends React.Component {
                     <tbody>
                     {this.props.blogs.sort((a, b) => b.likes - a.likes).map(
                         blog =>
-                            <tr>
+                            <tr key={blog.id}>
                                 <td>
                                     <Link to={`/blogs/${blog.id}`}>
                                         {blog.title} by {blog.author}
