@@ -1,6 +1,7 @@
 import React from 'react'
 import BlogList from './components/BlogList'
 import UserList from './components/UserList'
+import UserInfo from './components/UserInfo'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
@@ -8,6 +9,7 @@ import Login from './components/Login'
 import Notification from './components/Notification'
 import Toggleable from './components/Toggleable'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import userService from './services/users'
 
 class App extends React.Component {
     constructor (props) {
@@ -90,14 +92,17 @@ class App extends React.Component {
         this.setState({blogs: blogsWithoutOne})
     }
 
-    componentDidMount () {
-        blogService.getAll().then(blogs =>
-            this.setState({blogs}),
-        )
+    async componentDidMount () {
+        const blogs = await blogService.getAll()
+        this.setState({blogs})
+
+        const users = await userService.getAll()
+        this.setState({users})
 
         const loggedUserJSON = window.localStorage.getItem('loggedUser')
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
+            console.log(user)
             this.setState({user})
             blogService.setToken(user.token)
         }
@@ -140,8 +145,12 @@ class App extends React.Component {
                                           addBlog={this.addBlog}/>
                             </Toggleable>
                         </div>}/>
-                    <Route path={'/users'} render={() =>
+                    <Route exact path={'/users'} render={() =>
                         <UserList/>}/>
+                    <Route exact path="/users/:id"
+                           render={({match}) => <UserInfo
+                               user={this.state.users.find(
+                                   u => u.id === match.params.id)}/>}/>
                 </div>
             </Router>
         )
