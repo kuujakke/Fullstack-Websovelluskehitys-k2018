@@ -8,7 +8,8 @@ const blogSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    comments: [],
 })
 
 blogSchema.statics.format = (blog) => {
@@ -19,6 +20,7 @@ blogSchema.statics.format = (blog) => {
         id: blog._id,
         likes: blog.likes,
         user: blog.user,
+        comments: blog.comments,
     }
 }
 

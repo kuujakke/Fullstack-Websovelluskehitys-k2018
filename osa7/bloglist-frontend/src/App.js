@@ -68,6 +68,15 @@ class App extends React.Component {
             : null
     }
 
+    handleComment = (blog, comment) => async (event) => {
+        const newBlog = {
+            ...blog,
+            comments: blog.comments.concat(comment)
+        }
+        await blogService.update(newBlog)
+        this.updateBlog(newBlog)
+    }
+
     flashMessage = (message) => {
         this.setState({message})
         setTimeout(() => {
@@ -153,6 +162,7 @@ class App extends React.Component {
                                                               match.params.id)}
                                                       likeHandler={this.handleLike}
                                                       deleteHandler={this.handleDelete}
+                                                      commentHandler={this.handleComment}
                                                       user={this.state.user}/>}/>
                 </div>
             </Router>
