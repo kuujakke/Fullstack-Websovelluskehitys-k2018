@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 
 class UserInfo extends React.Component {
     render () {
-        console.log(this.props.user)
         return (
             <div>
                 <h2>{this.props.user.name}</h2>

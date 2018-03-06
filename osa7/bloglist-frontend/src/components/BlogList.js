@@ -1,8 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 class BlogList extends React.Component {
     render () {
+        console.log(this.props)
         return (
             <div className={'blog-list'}>
                 <table>
@@ -24,4 +26,12 @@ class BlogList extends React.Component {
     }
 }
 
-export default BlogList
+const mapStateToProps = (state) => {
+    return {blogs: state.blogs}
+}
+
+const ConnectedBlogList = connect(
+    mapStateToProps,
+)(BlogList)
+
+export default ConnectedBlogList

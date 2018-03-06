@@ -14,6 +14,7 @@ import Navigation from './components/Navigation'
 import { notifyWith } from './reducers/notificationReducer'
 import { connect } from 'react-redux'
 import { initializeUsers } from './reducers/userReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 class App extends React.Component {
     constructor (props) {
@@ -59,28 +60,6 @@ class App extends React.Component {
         this.setState({credentials: newCredentials})
     }
 
-    handleLike = (blog) => async () => {
-        blog.likes++
-        await blogService.update(blog)
-        this.updateBlog(blog)
-    }
-
-    handleDelete = (blog) => async () => {
-        await blogService.destroy(blog)
-        window.confirm(`Really delete ${blog.title} by ${blog.author}?`)
-            ? this.deleteBlog(blog)
-            : null
-    }
-
-    handleComment = (blog, comment) => async () => {
-        const newBlog = {
-            ...blog,
-            comments: blog.comments.concat(comment),
-        }
-        await blogService.update(newBlog)
-        this.updateBlog(newBlog)
-    }
-
     addBlog = (blog) => {
         let blogs = this.state.blogs
         blog.user = this.state.user
@@ -89,23 +68,9 @@ class App extends React.Component {
         this.blogForm.toggleVisibility()
     }
 
-    updateBlog = (blog) => {
-        let blogsWithoutOne = this.state.blogs.filter(b => b.id !== blog.id)
-        let updatedBlogs = blogsWithoutOne.concat(blog)
-        this.setState({blogs: updatedBlogs})
-    }
-
-    deleteBlog = (blog) => {
-        let blogsWithoutOne = this.state.blogs.filter(b => b.id !== blog.id)
-        this.setState({blogs: blogsWithoutOne})
-    }
-
     async componentDidMount () {
-        const blogs = await blogService.getAll()
-        this.setState({blogs})
-
-        this.props.initializeUsers()
-
+        await this.props.initializeUsers()
+        await this.props.initializeBlogs()
         const loggedUserJSON = window.localStorage.getItem('loggedUser')
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
@@ -135,14 +100,11 @@ class App extends React.Component {
                     <Notification/>
                     <Route exact path={'/'} render={() =>
                         <div>
-                            <BlogList blogs={this.state.blogs}
-                                      user={this.state.user}
-                                      handleLike={this.handleLike}
-                                      handleDelete={this.handleDelete}/>
+                            <BlogList/>
                             <Toggleable buttonLabel="Create blog"
                                         ref={
                                             component => this.blogForm = component}>
-                                <BlogForm addBlog={this.addBlog}/>
+                                <BlogForm user={this.state.user}/>
                             </Toggleable>
                         </div>}/>
                     <Route exact path={'/users'} render={() =>
@@ -151,14 +113,9 @@ class App extends React.Component {
                            render={({match}) => <UserInfo
                                userId={match.params.id}/>}/>
                     <Route exact path={'/blogs/:id'}
-                           render={({match}) => <Blog key={match.params.id}
-                                                      blog={this.state.blogs.find(
-                                                          b => b.id ===
-                                                              match.params.id)}
-                                                      likeHandler={this.handleLike}
-                                                      deleteHandler={this.handleDelete}
-                                                      commentHandler={this.handleComment}
-                                                      user={this.state.user}/>}/>
+                           render={({match, history}) => <Blog
+                               blogId={match.params.id}
+                               user={this.state.user} history={history}/>}/>
                 </div>
             </Router>
         )
@@ -170,7 +127,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    notifyWith, initializeUsers
+    notifyWith, initializeUsers, initializeBlogs,
 }
 
 const ConnectedApp = connect(

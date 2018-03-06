@@ -1,11 +1,11 @@
 import userService from '../services/users'
 
-const userReducer = (users = [], action) => {
+const userReducer = (store = [], action) => {
     switch (action.type) {
         case 'INIT':
-            return action.data
+            return [...action.data]
         default:
-            return users
+            return store
     }
 }
 
