@@ -1,5 +1,7 @@
 import React from 'react'
 import blogService from '../services/blogs'
+import { notifyWith } from '../reducers/notificationReducer'
+import { connect } from 'react-redux'
 
 class NewBlog extends React.Component {
     constructor (props) {
@@ -26,16 +28,25 @@ class NewBlog extends React.Component {
             console.log(blog)
             if (blog) {
                 this.props.addBlog(blog)
-                this.props.flashMessage(
-                    {text: 'Succesfully created blog entry!', type: 'success'})
+                this.props.notifyWith(
+                    {
+                        message: 'Succesfully created blog entry!',
+                        messageType: 'success',
+                    })
             } else {
-                this.props.flashMessage(
-                    {text: 'Error creating blog entry!', type: 'error'})
+                this.props.notifyWith(
+                    {
+                        message: 'Error creating blog entry!',
+                        messageType: 'error',
+                    })
             }
             this.setState({author: '', title: '', url: ''})
         } catch (exception) {
-            this.props.flashMessage(
-                {text: 'Something went wrong!', type: 'error'})
+            this.props.notifyWith(
+                {
+                    message: 'Something went wrong!',
+                    messageType: 'error',
+                })
         }
 
     }
@@ -64,4 +75,17 @@ class NewBlog extends React.Component {
     }
 }
 
-export default NewBlog
+const mapStateToProps = (state) => {
+    return state
+}
+
+const mapDispatchToProps = {
+    notifyWith,
+}
+
+const ConnectedBlogForm = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(NewBlog)
+
+export default ConnectedBlogForm

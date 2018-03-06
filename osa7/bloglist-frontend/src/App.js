@@ -12,6 +12,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import userService from './services/users'
 import Blog from './components/Blog'
 import Navigation from './components/Navigation'
+import { notifyWith } from './reducers/notificationReducer'
+import { connect } from 'react-redux'
 
 class App extends React.Component {
     constructor (props) {
@@ -24,7 +26,6 @@ class App extends React.Component {
                 username: '',
                 password: '',
             },
-            message: null,
         }
     }
 
@@ -34,11 +35,12 @@ class App extends React.Component {
             const user = await loginService.login(this.state.credentials)
             window.localStorage.setItem('loggedUser', JSON.stringify(user))
             this.setState({credentials: {username: '', password: ''}, user})
-            this.flashMessage({text: 'Login successful!', type: 'success'})
+            this.props.notifyWith(
+                {message: 'Login successful!', messageType: 'success'})
         } catch (exception) {
-            this.flashMessage({
-                text: 'Incorrect username or password!',
-                type: 'error',
+            this.props.notifyWith({
+                message: 'Incorrect username or password!',
+                messageType: 'error',
             })
         }
     }
@@ -46,7 +48,8 @@ class App extends React.Component {
     handleLogout = () => {
         window.localStorage.removeItem('loggedUser')
         this.setState({user: null})
-        this.flashMessage({text: 'Successfully logged out.', type: 'success'})
+        this.props.notifyWith(
+            {message: 'Successfully logged out.', messageType: 'success'})
     }
 
     handleCredentialChange = (event) => {
@@ -71,17 +74,10 @@ class App extends React.Component {
     handleComment = (blog, comment) => async (event) => {
         const newBlog = {
             ...blog,
-            comments: blog.comments.concat(comment)
+            comments: blog.comments.concat(comment),
         }
         await blogService.update(newBlog)
         this.updateBlog(newBlog)
-    }
-
-    flashMessage = (message) => {
-        this.setState({message})
-        setTimeout(() => {
-            this.setState({message: null})
-        }, 5000)
     }
 
     addBlog = (blog) => {
@@ -134,8 +130,9 @@ class App extends React.Component {
             <Router>
                 <div>
                     <h1>Blogs</h1>
-                    <Navigation name={this.state.user.name} logoutHandler={this.handleLogout}/>
-                    <Notification message={this.state.message}/>
+                    <Navigation name={this.state.user.name}
+                                logoutHandler={this.handleLogout}/>
+                    <Notification/>
                     <Route exact path={'/'} render={() =>
                         <div>
                             <BlogList blogs={this.state.blogs}
@@ -145,8 +142,7 @@ class App extends React.Component {
                             <Toggleable buttonLabel="Create blog"
                                         ref={
                                             component => this.blogForm = component}>
-                                <BlogForm flashMessage={this.flashMessage}
-                                          addBlog={this.addBlog}/>
+                                <BlogForm addBlog={this.addBlog}/>
                             </Toggleable>
                         </div>}/>
                     <Route exact path={'/users'} render={() =>
@@ -170,4 +166,17 @@ class App extends React.Component {
     }
 }
 
-export default App
+const mapStateToProps = (state) => {
+    return state
+}
+
+const mapDispatchToProps = {
+    notifyWith,
+}
+
+const ConnectedApp = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(App)
+
+export default ConnectedApp

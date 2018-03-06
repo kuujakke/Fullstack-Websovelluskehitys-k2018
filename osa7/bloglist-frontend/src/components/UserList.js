@@ -25,7 +25,7 @@ class UserList extends React.Component {
                     <th>Blogs added</th>
                 </tr>
                 {this.state.users.map(user =>
-                    <tr>
+                    <tr key={user.id}>
                         <td><Link to={`/users/${user.id}`}>
                             {user.name}</Link></td>
                         <td>{user.blogs.length}</td>
