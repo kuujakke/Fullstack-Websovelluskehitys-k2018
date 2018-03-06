@@ -1,4 +1,6 @@
 import React from 'react'
+import { initializeUsers } from '../reducers/userReducer'
+import { connect } from 'react-redux'
 
 class UserInfo extends React.Component {
     render () {
@@ -16,4 +18,17 @@ class UserInfo extends React.Component {
     }
 }
 
-export default UserInfo
+const mapStateToProps = (state, ownProps) => {
+    return {user: state.users.find(u => u.id === ownProps.userId)}
+}
+
+const mapDispatchToProps = {
+    initializeUsers,
+}
+
+const ConnectedUserInfo = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(UserInfo)
+
+export default ConnectedUserInfo

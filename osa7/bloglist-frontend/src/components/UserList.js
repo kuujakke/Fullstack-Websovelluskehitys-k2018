@@ -1,19 +1,12 @@
 import React from 'react'
-import userService from '../services/users'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { initializeUsers } from '../reducers/userReducer'
+
 
 class UserList extends React.Component {
-    constructor (props) {
-        super(props)
-        this.state = {
-            users: [],
-        }
-    }
-
     async componentDidMount () {
-        const users = await userService.getAll()
-        console.log(users)
-        this.setState({users})
+        this.props.initializeUsers()
     }
 
     render () {
@@ -24,7 +17,7 @@ class UserList extends React.Component {
                     <th>Name</th>
                     <th>Blogs added</th>
                 </tr>
-                {this.state.users.map(user =>
+                {this.props.users.map(user =>
                     <tr key={user.id}>
                         <td><Link to={`/users/${user.id}`}>
                             {user.name}</Link></td>
@@ -37,4 +30,17 @@ class UserList extends React.Component {
     }
 }
 
-export default UserList
+const mapStateToProps = (state) => {
+    return {users: state.users}
+}
+
+const mapDispatchToProps = {
+    initializeUsers,
+}
+
+const ConnectedUserList = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(UserList)
+
+export default ConnectedUserList

@@ -9,11 +9,11 @@ import Login from './components/Login'
 import Notification from './components/Notification'
 import Toggleable from './components/Toggleable'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import userService from './services/users'
 import Blog from './components/Blog'
 import Navigation from './components/Navigation'
 import { notifyWith } from './reducers/notificationReducer'
 import { connect } from 'react-redux'
+import { initializeUsers } from './reducers/userReducer'
 
 class App extends React.Component {
     constructor (props) {
@@ -26,6 +26,7 @@ class App extends React.Component {
                 username: '',
                 password: '',
             },
+            message: null,
         }
     }
 
@@ -71,7 +72,7 @@ class App extends React.Component {
             : null
     }
 
-    handleComment = (blog, comment) => async (event) => {
+    handleComment = (blog, comment) => async () => {
         const newBlog = {
             ...blog,
             comments: blog.comments.concat(comment),
@@ -103,8 +104,7 @@ class App extends React.Component {
         const blogs = await blogService.getAll()
         this.setState({blogs})
 
-        const users = await userService.getAll()
-        this.setState({users})
+        this.props.initializeUsers()
 
         const loggedUserJSON = window.localStorage.getItem('loggedUser')
         if (loggedUserJSON) {
@@ -149,8 +149,7 @@ class App extends React.Component {
                         <UserList/>}/>
                     <Route exact path={'/users/:id'}
                            render={({match}) => <UserInfo
-                               user={this.state.users.find(
-                                   u => u.id === match.params.id)}/>}/>
+                               userId={match.params.id}/>}/>
                     <Route exact path={'/blogs/:id'}
                            render={({match}) => <Blog key={match.params.id}
                                                       blog={this.state.blogs.find(
@@ -171,7 +170,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    notifyWith,
+    notifyWith, initializeUsers
 }
 
 const ConnectedApp = connect(
