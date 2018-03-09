@@ -2,7 +2,7 @@ import userService from '../services/users'
 
 const userReducer = (store = [], action) => {
     switch (action.type) {
-        case 'INIT':
+        case 'INIT-USERS':
             return [...action.data]
         default:
             return store
@@ -12,7 +12,7 @@ const userReducer = (store = [], action) => {
 export const initializeUsers = () => {
     return async (dispatch) => {
         const users = await userService.getAll()
-        dispatch({type: 'INIT', data: users})
+        dispatch({type: 'INIT-USERS', data: users})
     }
 }
 

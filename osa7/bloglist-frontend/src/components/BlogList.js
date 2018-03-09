@@ -1,12 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import Heading from './Heading'
 
 class BlogList extends React.Component {
     render () {
-        console.log(this.props)
         return (
             <div className={'blog-list'}>
+                <Heading title={'Blogs'} history={this.props.history}/>
                 <table>
                     <tbody>
                     {this.props.blogs.sort((a, b) => b.likes - a.likes).map(
@@ -26,8 +27,8 @@ class BlogList extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {blogs: state.blogs}
+const mapStateToProps = (state, ownProps) => {
+    return {blogs: state.blogs, history: ownProps.history}
 }
 
 const ConnectedBlogList = connect(

@@ -52,6 +52,7 @@ class NewBlog extends React.Component {
     }
 
     render () {
+        console.log(this.props.user)
         return (
             <form onSubmit={this.handleCreate}>
                 <div>Title:
@@ -75,8 +76,8 @@ class NewBlog extends React.Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {user: ownProps.user}
+const mapStateToProps = (state) => {
+    return {user: state.login}
 }
 
 const mapDispatchToProps = {

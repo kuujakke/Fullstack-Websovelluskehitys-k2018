@@ -2,7 +2,7 @@ import blogService from '../services/blogs'
 
 const blogReducer = (store = [], action) => {
     switch (action.type) {
-        case 'INIT':
+        case 'INIT-BLOGS':
             return [...action.data]
         case 'CREATE':
             console.log(action.blog)
@@ -49,11 +49,6 @@ export const commentBlog = (id, comment) => {
     }
 }
 
-const findById = async (id) => {
-    const blogs = await blogService.getAll()
-    return blogs.find(b => b.id === id)
-}
-
 export const destroyBlog = (id) => {
     return async (dispatch) => {
         await blogService.destroy({id})
@@ -61,10 +56,15 @@ export const destroyBlog = (id) => {
     }
 }
 
+const findById = async (id) => {
+    const blogs = await blogService.getAll()
+    return blogs.find(b => b.id === id)
+}
+
 export const initializeBlogs = () => {
     return async (dispatch) => {
         const blogs = await blogService.getAll()
-        dispatch({type: 'INIT', data: blogs})
+        dispatch({type: 'INIT-BLOGS', data: blogs})
     }
 }
 

@@ -3,6 +3,7 @@ import Comments from './Comments'
 import { initializeUsers } from '../reducers/userReducer'
 import { connect } from 'react-redux'
 import { destroyBlog, likeBlog } from '../reducers/blogReducer'
+import Heading from './Heading'
 
 class Blog extends React.Component {
 
@@ -22,6 +23,8 @@ class Blog extends React.Component {
         const blog = this.props.blog
         return (
             <div>
+                <Heading title={`${blog.title} by ${blog.author}`}
+                         history={this.props.history}/>
                 <div className={'blog-details'}>
                     <p className={'blog-title'}>{blog.title}</p>
                     <p className={'blog-author'}>{blog.author}</p>
