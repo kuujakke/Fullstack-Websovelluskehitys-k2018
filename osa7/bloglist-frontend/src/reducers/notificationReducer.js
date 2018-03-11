@@ -6,19 +6,20 @@ const notificationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 message: action.message,
-                messageType: action.messageType,
+                error: action.error,
+                success: action.success,
             }
         default:
             return state
     }
 }
 
-export const setMessage = (message, messageType) => {
-    return {type: 'SET', message, messageType}
+export const setMessage = (message, error, success) => {
+    return {type: 'SET', message, error, success}
 }
 
 export const resetMessage = () => {
-    return {type: 'SET', message: null, messageType: null}
+    return {type: 'SET', message: null, error: false, success: false}
 }
 
 export const notifyWith = (message, messageType, duration) => {

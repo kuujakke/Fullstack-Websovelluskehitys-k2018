@@ -1,35 +1,34 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import Heading from './Heading'
+import { Table } from 'semantic-ui-react'
 
 class UserList extends React.Component {
     render () {
         return (
-            <div>
-                <Heading title={'Users'} history={this.props.history}/>
-                <table className={'user-list'}>
-                    <tbody>
-                    <tr>
-                        <th>Name</th>
-                        <th>Blogs added</th>
-                    </tr>
+            <Table className={'user-list'} celled compact={'very'} selectable unstackable>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Name</Table.HeaderCell>
+                        <Table.HeaderCell>Blogs added</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
                     {this.props.users.map(user =>
-                        <tr key={user.id}>
-                            <td><Link to={`/users/${user.id}`}>
-                                {user.name}</Link></td>
-                            <td>{user.blogs.length}</td>
-                        </tr>,
+                        <Table.Row key={user.id}>
+                            <Table.Cell><Link to={`/users/${user.id}`}>
+                                {user.name}</Link></Table.Cell>
+                            <Table.Cell>{user.blogs.length}</Table.Cell>
+                        </Table.Row>,
                     )}
-                    </tbody>
-                </table>
-            </div>
+                </Table.Body>
+            </Table>
         )
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {users: state.users, history: ownProps.history}
+const mapStateToProps = (state) => {
+    return {users: state.users}
 }
 
 const ConnectedUserList = connect(

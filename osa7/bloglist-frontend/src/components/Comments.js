@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Button, Comment, Form, Header } from 'semantic-ui-react'
 import { commentBlog } from '../reducers/blogReducer'
 import { notifyWith } from '../reducers/notificationReducer'
 
@@ -38,22 +39,25 @@ class Comments extends React.Component {
     render () {
         const newComment = {id: this.state.id, content: this.state.content}
         return (
-            <div className={'blog-comments'}>
-                <h3>Comments</h3>
-                <ul>
-                    {(this.props.comments &&
-                        this.props.comments.length > 0)
-                        ? this.props.comments.map(
-                            c => <li key={c.id}>{c.content}</li>)
-                        : null}
-                </ul>
-                <form
+            <Comment.Group>
+                <Header>Comments</Header>
+                {(this.props.comments &&
+                    this.props.comments.length > 0)
+                    ? this.props.comments.map(c =>
+                        <Comment key={c.id}>
+                            <Comment.Avatar src='https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295430_960_720.png'/>
+                            <Comment.Content>
+                                <Comment.Text content={c.content}/>
+                            </Comment.Content>
+                        </Comment>)
+                    : null}
+                <Form
                     onSubmit={this.commentHandler(this.props.blog,
-                        newComment)}>
+                        newComment)} reply>
                     <input onChange={this.changeHandler} name='comment'/>
-                    <button type={'submit'}>Add comment</button>
-                </form>
-            </div>
+                    <Button type={'submit'}>Add comment</Button>
+                </Form>
+            </Comment.Group>
         )
     }
 }
@@ -66,7 +70,7 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = {
-    commentBlog, notifyWith
+    commentBlog, notifyWith,
 }
 
 const ConnectedComment = connect(

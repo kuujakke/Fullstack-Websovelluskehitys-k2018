@@ -1,34 +1,31 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import Heading from './Heading'
+import { Table } from 'semantic-ui-react'
 
 class BlogList extends React.Component {
     render () {
         return (
-            <div className={'blog-list'}>
-                <Heading title={'Blogs'} history={this.props.history}/>
-                <table>
-                    <tbody>
+            <Table selectable unstackable>
+                <Table.Body>
                     {this.props.blogs.sort((a, b) => b.likes - a.likes).map(
                         blog =>
-                            <tr key={blog.id}>
-                                <td>
+                            <Table.Row key={blog.id}>
+                                <Table.Cell textAlign={'center'}>
                                     <Link to={`/blogs/${blog.id}`}>
                                         {blog.title} by {blog.author}
                                     </Link>
-                                </td>
-                            </tr>
+                                </Table.Cell>
+                            </Table.Row>,
                     )}
-                    </tbody>
-                </table>
-            </div>
+                </Table.Body>
+            </Table>
         )
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {blogs: state.blogs, history: ownProps.history}
+const mapStateToProps = (state) => {
+    return {blogs: state.blogs}
 }
 
 const ConnectedBlogList = connect(

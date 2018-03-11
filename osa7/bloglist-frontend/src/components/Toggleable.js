@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Button, Divider } from 'semantic-ui-react'
 
 class Toggleable extends React.Component {
     constructor (props) {
@@ -20,13 +21,14 @@ class Toggleable extends React.Component {
         return (
             <div className={'toggleable'}>
                 <div style={hideWhenVisible} className={'toggle-header'}>
-                    <div
+                    <Button
                         onClick={this.toggleVisibility}
-                        className={'toggle'}>{this.props.buttonLabel}</div>
+                        className={'toggle'}>{this.props.buttonLabel}</Button>
                 </div>
                 <div style={showWhenVisible} className={'toggle-content'}>
                     {this.props.children}
-                    <button onClick={this.toggleVisibility}>Close</button>
+                    <Divider/>
+                    <Button onClick={this.toggleVisibility}>Close</Button>
                 </div>
             </div>
         )

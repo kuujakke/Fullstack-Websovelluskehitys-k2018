@@ -1,17 +1,17 @@
 import React from 'react'
-import UserList from './components/UserList'
-import UserInfo from './components/UserInfo'
-import blogService from './services/blogs'
-import LoginForm from './components/LoginForm'
+import { connect } from 'react-redux'
 import {
     BrowserRouter as Router, Redirect, Route,
 } from 'react-router-dom'
+import Users from './components/Users'
+import UserInfo from './components/UserInfo'
+import Blogs from './components/Blogs'
 import Blog from './components/Blog'
-import { connect } from 'react-redux'
 import { notifyWith } from './reducers/notificationReducer'
 import { initializeUsers } from './reducers/userReducer'
 import { initializeBlogs } from './reducers/blogReducer'
-import Home from './components/Home'
+import Login from './components/Login'
+import { setUser } from './reducers/loginReducer'
 
 class App extends React.Component {
     constructor (props) {
@@ -29,40 +29,47 @@ class App extends React.Component {
         this.blogForm.toggleVisibility()
     }
 
+    getLocalUser = () => {
+        const loggedUser = window.localStorage.getItem('loggedUser')
+        if (loggedUser) {
+            return JSON.parse(loggedUser)
+        }
+        return {token: undefined}
+    }
+
     async componentDidMount () {
         await this.props.initializeUsers()
         await this.props.initializeBlogs()
-        const loggedUserJSON = window.localStorage.getItem('loggedUser')
-        if (loggedUserJSON) {
-            const user = JSON.parse(loggedUserJSON)
-            this.setState({user})
-            blogService.setToken(user.token)
+        const localUser = this.getLocalUser()
+        if (!this.props.user.token && localUser.token) {
+            this.props.setUser(localUser)
         }
     }
 
     render () {
+        const localUser = this.getLocalUser()
         return (
             <Router>
                 <div>
+                    <Route exact path={'/'} render={() => localUser ?
+                        <Redirect to={'/blogs'}/> : <Redirect to={'/login'}/>}/>
                     <Route exact path={'/login'} render={({history}) =>
-                        <LoginForm history={history}/>}/>
-                    <Route exact path={'/'} render={({history}) =>
-                        this.state.user ? <Home history={history}/> :
+                        <Login history={history}/>}/>
+                    <Route exact path={'/blogs'} render={({history}) =>
+                        localUser.token ? <Blogs history={history}/> :
                             <Redirect to={'/login'}/>}/>
-                    <Route path={'/users'} render={({history}) =>
-                        this.state.user ? <UserList history={history}/> :
+                    <Route exact path={'/users'} render={({history}) =>
+                        localUser.token ? <Users history={history}/> :
                             <Redirect to={'/login'}/>}/>
-                    <Route path={'/users/:id'}
-                           render={({match, history}) =>
-                               <UserInfo
-                                   userId={match.params.id}
-                                   history={history}/>}/>
-                    <Route path={'/blogs/:id'}
-                           render={({match, history}) =>
-                               <Blog
-                                   blogId={match.params.id}
-                                   user={this.state.user}
-                                   history={history}/>}/>
+                    <Route path={'/users/:id'} render={({match, history}) =>
+                        localUser.token ? <UserInfo
+                            userId={match.params.id}
+                            history={history}/> : <Redirect to={'/login'}/>}/>
+                    <Route path={'/blogs/:id'} render={({match, history}) =>
+                        localUser.token ? <Blog
+                            blogId={match.params.id}
+                            user={this.state.user}
+                            history={history}/> : <Redirect to={'/login'}/>}/>
                 </div>
             </Router>
         )
@@ -70,11 +77,11 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    return {login: state.login}
+    return {user: state.login}
 }
 
 const mapDispatchToProps = {
-    notifyWith, initializeUsers, initializeBlogs,
+    notifyWith, initializeUsers, initializeBlogs, setUser
 }
 
 const ConnectedApp = connect(

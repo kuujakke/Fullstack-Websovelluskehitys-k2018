@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { notifyWith } from '../reducers/notificationReducer'
 import { createBlog } from '../reducers/blogReducer'
+import { Button, Form } from 'semantic-ui-react'
 
 class NewBlog extends React.Component {
     constructor (props) {
@@ -24,19 +25,18 @@ class NewBlog extends React.Component {
                 author: this.state.author,
                 title: this.state.title,
                 url: this.state.url,
-                user: this.props.user,
-            })
+            }, this.props.user.token)
             if (blog) {
                 this.props.notifyWith(
                     {
-                        message: 'Succesfully created blog entry!',
-                        messageType: 'success',
+                        message: 'Successfully created blog entry!',
+                        success: true,
                     })
             } else {
                 this.props.notifyWith(
                     {
                         message: 'Error creating blog entry!',
-                        messageType: 'error',
+                        error: true,
                     })
             }
             this.setState({author: '', title: '', url: ''})
@@ -45,7 +45,7 @@ class NewBlog extends React.Component {
             this.props.notifyWith(
                 {
                     message: 'Something went wrong!',
-                    messageType: 'error',
+                    error: true,
                 })
         }
 
@@ -54,24 +54,27 @@ class NewBlog extends React.Component {
     render () {
         console.log(this.props.user)
         return (
-            <form onSubmit={this.handleCreate}>
-                <div>Title:
+            <Form onSubmit={this.handleCreate}>
+                <Form.Field>
+                    <label>Title:</label>
                     <input type="text" title={'title'}
                            value={this.state.title}
                            onChange={this.handleChange}/>
-                </div>
-                <div>Author:
+                </Form.Field>
+                <Form.Field>
+                    <label>Author:</label>
                     <input type="text" title={'author'}
                            value={this.state.author}
                            onChange={this.handleChange}/>
-                </div>
-                <div>Url:
+                </Form.Field>
+                <Form.Field>
+                    <label>Url:</label>
                     <input type="text" title={'url'}
                            value={this.state.url}
                            onChange={this.handleChange}/>
-                </div>
-                <button type="submit">Create</button>
-            </form>
+                </Form.Field>
+                <Button type="submit">Create</Button>
+            </Form>
         )
     }
 }

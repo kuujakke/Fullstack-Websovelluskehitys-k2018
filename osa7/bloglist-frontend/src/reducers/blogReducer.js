@@ -5,7 +5,6 @@ const blogReducer = (store = [], action) => {
         case 'INIT-BLOGS':
             return [...action.data]
         case 'CREATE':
-            console.log(action.blog)
             return [...store, {...action.blog}]
         case 'DESTROY':
             return store.filter(b => b.id !== action.id)
@@ -22,9 +21,12 @@ const blogReducer = (store = [], action) => {
     }
 }
 
-export const createBlog = (blog) => {
+export const createBlog = (blog, token) => {
     return async (dispatch) => {
+        console.log(blog, token)
+        blogService.setToken(token)
         const newBlog = await blogService.create(blog)
+        console.log(newBlog)
         dispatch({type: 'CREATE', blog: newBlog})
         return newBlog
     }
@@ -49,8 +51,9 @@ export const commentBlog = (id, comment) => {
     }
 }
 
-export const destroyBlog = (id) => {
+export const destroyBlog = (id, token) => {
     return async (dispatch) => {
+        blogService.setToken(token)
         await blogService.destroy({id})
         dispatch({type: 'DESTROY', id})
     }

@@ -2,7 +2,7 @@ import React from 'react'
 import { notifyWith } from '../reducers/notificationReducer'
 import { loginUser } from '../reducers/loginReducer'
 import { connect } from 'react-redux'
-import Notification from './Notification'
+import { Button, Card, Form } from 'semantic-ui-react'
 
 class LoginForm extends React.Component {
     constructor (props) {
@@ -21,12 +21,12 @@ class LoginForm extends React.Component {
         try {
             await this.props.loginUser(this.state.credentials)
             this.props.notifyWith(
-                {message: 'Login successful!', messageType: 'success'})
+                {message: 'Login successful!', success: true})
             this.props.history.push('/')
         } catch (exception) {
             this.props.notifyWith({
                 message: 'Incorrect username or password!',
-                messageType: 'error',
+                error: true,
             })
         }
     }
@@ -39,26 +39,34 @@ class LoginForm extends React.Component {
 
     render () {
         return (
-            <div>
-                <h1>Log in to application</h1>
-                <Notification/>
-                <form onSubmit={this.handleLogin} className={'login-form'}>
-                    <div className={'login-username'}>
-                        <label>käyttäjätunnus</label>
-                        <input type="text" title={'username'}
-                               value={this.state.credentials.username}
-                               onChange={this.handleCredentialChange}/>
-                    </div>
-                    <div className={'login-password'}>
-                        <label>salasana</label>
-                        <input type="password" title={'password'}
-                               value={this.state.credentials.password}
-                               onChange={this.handleCredentialChange}/>
-                    </div>
-                    <button type="submit" className={'login-submit'}>kirjaudu
-                    </button>
-                </form>
-            </div>
+            <Card centered raised>
+                <Card.Content>
+                    <Card.Header textAlign={'center'}>Kirjaudu sisään</Card.Header>
+                    <Card.Description>
+                        <Form onSubmit={this.handleLogin}
+                              className={'login-form'}>
+                            <Form.Field>
+                                <label>Käyttäjätunnus</label>
+                                <input type="text" title={'username'}
+                                       value={this.state.credentials.username}
+                                       onChange={this.handleCredentialChange}/>
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Salasana</label>
+                                <input type="password" title={'password'}
+                                       value={this.state.credentials.password}
+                                       onChange={this.handleCredentialChange}/>
+                            </Form.Field>
+                        </Form>
+                    </Card.Description>
+                </Card.Content>
+                <Card.Content textAlign={'center'}>
+                    <Button type="submit"
+                            className={'login-submit'}
+                            onClick={this.handleLogin}>Kirjaudu
+                    </Button>
+                </Card.Content>
+            </Card>
         )
     }
 }

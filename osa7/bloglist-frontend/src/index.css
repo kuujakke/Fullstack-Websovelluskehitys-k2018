@@ -1,20 +1,3 @@
-h1, h2, p, label, td, button, input, text, .toggleable {
-    color: #49274A;
-    font-family: "Lato Hairline", sans-serif;
-    border-radius: 9px;
-    padding: 2px;
-    margin: 2px;
-}
-
-h1 {
-    font-size: 3em;
-    text-align: center;
-}
-
-input {
-    background-color: #f8f7ef;
-}
-
 .error {
     background-color: firebrick;
     color: #F8EEE7;
