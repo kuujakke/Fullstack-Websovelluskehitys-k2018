@@ -84,7 +84,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    notifyWith, createBlog
+    notifyWith, createBlog,
 }
 
 const ConnectedBlogForm = connect(
